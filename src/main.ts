@@ -5,7 +5,7 @@ import { PacMan } from './pacman';
 import { Ghost } from './ghost';
 import { Direction } from './types';
 import { TILE_SIZE } from './constants';
-import { GameState, GhostMode } from './gameState';
+import { GameState, GhostMode, GameStatus } from './gameState';
 import { getBlinkyTarget, getPinkyTarget, getInkyTarget, getClydeTarget } from './ghostTargeting';
 import { checkCollision } from './collision';
 import { MazeState } from './mazeState';
@@ -51,6 +51,9 @@ async function init() {
     const ghosts = [blinky, pinky, inky, clyde];
     app.stage.addChild(...ghosts.map(g => g.container));
 
+    // Ensure UI is on top
+    scoringUI.addTo(app.stage);
+
     let gameStarted = false;
 
     const resetPositions = () => {
@@ -69,26 +72,39 @@ async function init() {
             g.setHouseTimer(60); // 1 second wait
         });
 
-        scoringUI.showReady(true);
+        if (gameState.lives > 0) {
+            scoringUI.showReady(true);
+            gameState.status = GameStatus.READY;
+        } else {
+            scoringUI.showGameOver(true);
+            gameState.status = GameStatus.GAME_OVER;
+        }
+        scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore(), gameState.lives);
     };
 
     const startGame = () => {
-        if (gameStarted) return;
+        if (gameStarted && gameState.status !== GameStatus.READY) return;
         gameStarted = true;
+        gameState.status = GameStatus.PLAYING;
         scoringUI.showReady(false);
         audioManager.play('intro');
-        resetPositions();
-        // Delay actual movement until intro finishes? 
-        // For now just start looping siren
+        // Resume siren after intro
         setTimeout(() => {
-            audioManager.play('siren', true);
+            if (!audioManager.isPlaying('siren') && gameState.status === GameStatus.PLAYING) {
+                audioManager.play('siren', true);
+            }
         }, 4000);
     };
 
+    // Initialize UI and state
+    resetPositions();
+
     // User interaction required for audio
     window.addEventListener('keydown', () => {
-        if (!gameStarted) startGame();
-    }, { once: true });
+        if (!gameStarted || gameState.status === GameStatus.READY) {
+            startGame();
+        }
+    });
 
     window.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowUp') pacman.setNextDirection(Direction.UP);
@@ -98,7 +114,7 @@ async function init() {
     });
 
     app.ticker.add((ticker) => {
-        if (!gameStarted) return;
+        if (!gameStarted || gameState.status !== GameStatus.PLAYING) return;
 
         gameState.update(ticker.deltaTime);
         pacman.update(ticker.deltaTime, mazeState.getData());
@@ -180,11 +196,8 @@ async function init() {
                     audioManager.stop('siren');
                     audioManager.stop('power_siren');
                     audioManager.play('death');
+                    gameState.loseLife();
                     resetPositions();
-                    // Resume siren after death sound (approx 2s)
-                    setTimeout(() => {
-                        audioManager.play('siren', true);
-                    }, 2000);
                 }
             }
         });
