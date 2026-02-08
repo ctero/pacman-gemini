@@ -61,6 +61,28 @@ async function init() {
     const clyde = new Ghost(15.5 * TILE_SIZE, 17 * TILE_SIZE, 0xffb852);
 
     const ghosts = [blinky, pinky, inky, clyde];
+    const updateGhostSpeeds = () => {
+        const data = gameState.getLevelData();
+        const arcadeBasePixelSpeed = (80 / 60);
+        ghosts.forEach(g => {
+            g.setSpeeds({
+                base: data.ghostSpeed * arcadeBasePixelSpeed,
+                frightened: data.ghostFrightenedSpeed * arcadeBasePixelSpeed,
+                tunnel: data.ghostTunnelSpeed * arcadeBasePixelSpeed
+            });
+        });
+
+        // Blinky (Red Ghost) Cruise Elroy logic
+        const dotsRemaining = mazeState.getRemainingItemsCount();
+        if (dotsRemaining <= data.elroy2Dots) {
+            blinky.setCruiseElroySpeed(data.elroy2Speed * arcadeBasePixelSpeed);
+        } else if (dotsRemaining <= data.elroy1Dots) {
+            blinky.setCruiseElroySpeed(data.elroy1Speed * arcadeBasePixelSpeed);
+        } else {
+            blinky.setCruiseElroySpeed(null);
+        }
+    };
+    updateGhostSpeeds();
     app.stage.addChild(...ghosts.map(g => g.container));
 
     // Ensure UI is on top
@@ -146,6 +168,7 @@ async function init() {
 
         gameState.update(ticker.deltaTime);
         fruitManager.update(ticker.deltaTime);
+        updateGhostSpeeds();
         const activeFruitForRender = fruitManager.getActiveFruit();
         fruitRenderer.render(activeFruitForRender ? activeFruitForRender.data.type : null);
         
@@ -198,6 +221,7 @@ async function init() {
                         scoringEngine.resetDotsEaten();
                         fruitManager.setLevel(gameState.level);
                         updatePacmanSpeeds();
+                        updateGhostSpeeds();
                         mazeState = new MazeState(MAZE_DATA);
                         mazeRenderer.render(mazeState.getData());
                         resetPositions();

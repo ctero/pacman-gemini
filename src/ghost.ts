@@ -9,7 +9,10 @@ export class Ghost {
     public y: number;
     public direction: Direction = Direction.NONE;
     public target: Point = { x: 0, y: 0 };
-    public speed: number = 1.8; // Slightly slower than Pac-Man (2.0)
+    private baseSpeed: number = 0.75 * (80 / 60);
+    private frightenedSpeed: number = 0.5 * (80 / 60);
+    private tunnelSpeed: number = 0.4 * (80 / 60);
+    private cruiseElroySpeed: number | null = null;
     private houseTimer: number = 0;
     private inHouse: boolean = true;
     private frightened: boolean = false;
@@ -29,6 +32,32 @@ export class Ghost {
         this.draw();
         this.container.addChild(this.graphics);
         this.updateVisualPosition();
+    }
+
+    public setSpeeds(speeds: { base: number, frightened: number, tunnel: number }) {
+        this.baseSpeed = speeds.base;
+        this.frightenedSpeed = speeds.frightened;
+        this.tunnelSpeed = speeds.tunnel;
+    }
+
+    public setCruiseElroySpeed(speed: number | null) {
+        this.cruiseElroySpeed = speed;
+    }
+
+    public getSpeed(): number {
+        const tileX = Math.round(this.x / TILE_SIZE);
+        const tileY = Math.round(this.y / TILE_SIZE);
+
+        // Tunnel check (Arcade: ghosts are slow in tunnels)
+        if (tileY === 17 && (tileX < 6 || tileX > 21)) {
+            return this.tunnelSpeed;
+        }
+
+        if (this.frightened) {
+            return this.frightenedSpeed;
+        }
+
+        return this.cruiseElroySpeed ?? this.baseSpeed;
     }
 
     public getEyeDirection(): Direction {
@@ -156,8 +185,10 @@ export class Ghost {
             return;
         }
 
+        const currentSpeed = this.getSpeed();
+
         // Decision point: center of tile
-        if (this.isAtTileCenter()) {
+        if (this.isAtTileCenter(currentSpeed)) {
             if (this.frightened) {
                 this.direction = this.chooseRandomDirection(maze);
             } else {
@@ -176,13 +207,13 @@ export class Ghost {
         }
 
         if (this.direction === Direction.LEFT) {
-            this.x -= this.speed;
+            this.x -= currentSpeed;
         } else if (this.direction === Direction.RIGHT) {
-            this.x += this.speed;
+            this.x += currentSpeed;
         } else if (this.direction === Direction.UP) {
-            this.y -= this.speed;
+            this.y -= currentSpeed;
         } else if (this.direction === Direction.DOWN) {
-            this.y += this.speed;
+            this.y += currentSpeed;
         }
         
         this.updateVisualPosition();
@@ -218,11 +249,11 @@ export class Ghost {
         return maze[nextY][nextX] !== MazeTile.WALL;
     }
 
-    private isAtTileCenter(): boolean {
+    private isAtTileCenter(speed: number): boolean {
         const offX = Math.abs((this.x % TILE_SIZE));
         const offY = Math.abs((this.y % TILE_SIZE));
-        // Using a small threshold for sub-pixel speed
-        return offX < this.speed && offY < this.speed;
+        // Using current speed as threshold for sub-pixel accuracy
+        return offX < speed && offY < speed;
     }
 
     protected updateVisualPosition() {
