@@ -31,4 +31,18 @@ describe('Ghost Base Class', () => {
         ghost.update();
         expect(ghost.x).toBe(14 * TILE_SIZE);
     });
+
+    it('should stay in the ghost house if houseTimer is positive', () => {
+        ghost.setHouseTimer(100);
+        ghost.setDirection(Direction.UP);
+        ghost.update();
+        // Should not have moved significantly if logic prevents exiting
+        expect(ghost.isInHouse()).toBe(true);
+    });
+
+    it('should count down the house timer during updates', () => {
+        ghost.setHouseTimer(10);
+        ghost.update();
+        expect(ghost.getHouseTimer()).toBeLessThan(10);
+    });
 });

@@ -6,6 +6,8 @@ export class Ghost {
     public y: number;
     public direction: Direction = Direction.NONE;
     public speed: number = 1.8; // Slightly slower than Pac-Man (2.0)
+    private houseTimer: number = 0;
+    private inHouse: boolean = true;
     
     public container: Container;
     private graphics: Graphics;
@@ -44,7 +46,28 @@ export class Ghost {
         this.direction = direction;
     }
 
+    public setHouseTimer(frames: number) {
+        this.houseTimer = frames;
+        this.inHouse = frames > 0;
+    }
+
+    public getHouseTimer(): number {
+        return this.houseTimer;
+    }
+
+    public isInHouse(): boolean {
+        return this.inHouse;
+    }
+
     public update() {
+        if (this.houseTimer > 0) {
+            this.houseTimer--;
+            if (this.houseTimer === 0) {
+                this.inHouse = false;
+            }
+            return;
+        }
+
         if (this.direction === Direction.LEFT) {
             this.x -= this.speed;
         } else if (this.direction === Direction.RIGHT) {
