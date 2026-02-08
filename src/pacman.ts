@@ -117,23 +117,21 @@ export class PacMan {
 
         // 2. Try to turn if we have a buffered direction
         if (this.nextDirection !== Direction.NONE && this.nextDirection !== this.direction) {
-            // We only check if a turn is possible if we are near the center of a tile
-            // and we check IF the turn is possible FROM that center.
             const snappedX = Math.round(this.x / TILE_SIZE) * TILE_SIZE;
             const snappedY = Math.round(this.y / TILE_SIZE) * TILE_SIZE;
             const distanceToCenter = Math.sqrt(Math.pow(this.x - snappedX, 2) + Math.pow(this.y - snappedY, 2));
 
+            // In arcade Pac-Man, you can turn if you are within 4 pixels of center
             if (distanceToCenter < 4) {
-                // Temporarily move to snapped position to check if the turn is possible
-                const originalX = this.x;
-                const originalY = this.y;
-                this.x = snappedX;
-                this.y = snappedY;
-
-                if (this.canMove(this.nextDirection, maze, currentSpeed, 1)) {
+                // Check if the target tile in nextDirection is navigable
+                const tileX = Math.round(snappedX / TILE_SIZE);
+                const tileY = Math.round(snappedY / TILE_SIZE);
+                
+                if (this.canMoveFrom(tileX, tileY, this.nextDirection, maze)) {
                     this.direction = this.nextDirection;
                     this.nextDirection = Direction.NONE;
-                    this.snapToTile();
+                    this.x = snappedX;
+                    this.y = snappedY;
                     // Move in the new direction immediately for responsiveness
                     this.move(this.direction, currentSpeed);
                     this.animationFrame++;
@@ -141,14 +139,10 @@ export class PacMan {
                     this.updateVisualPosition();
                     return;
                 }
-                // Restore original position if we can't turn
-                this.x = originalX;
-                this.y = originalY;
             }
         }
 
         // 3. Move in current direction
-        // Current movement uses a tighter margin (1) to prevent clipping through walls
         if (this.canMove(this.direction, maze, currentSpeed, 1)) {
             this.move(this.direction, currentSpeed);
             this.animationFrame++;
@@ -168,6 +162,23 @@ export class PacMan {
         }
         
         this.updateVisualPosition();
+    }
+
+    private canMoveFrom(tileX: number, tileY: number, dir: Direction, maze: MazeTile[][]): boolean {
+        let nextX = tileX;
+        let nextY = tileY;
+
+        if (dir === Direction.LEFT) nextX--;
+        if (dir === Direction.RIGHT) nextX++;
+        if (dir === Direction.UP) nextY--;
+        if (dir === Direction.DOWN) nextY++;
+
+        // Warp tunnels
+        if (nextY === 17 && (nextX < 0 || nextX >= 28)) return true;
+        if (nextX < 0 || nextX >= 28 || nextY < 0 || nextY >= 36) return false;
+
+        const tile = maze[nextY][nextX];
+        return tile !== MazeTile.WALL && tile !== MazeTile.GHOST_HOUSE_DOOR;
     }
 
     private move(dir: Direction, speed: number) {
