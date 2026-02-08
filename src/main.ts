@@ -103,11 +103,21 @@ async function init() {
             clyde.setTarget({ x: 0, y: 34 * TILE_SIZE });             // Bottom Left
         }
 
-        ghosts.forEach(ghost => {
-            ghost.update(MAZE_DATA);
+        ghosts.forEach((ghost, index) => {
+            ghost.update(mazeState.getData());
             if (checkCollision(pacman, ghost)) {
                 if (ghost.isFrightened()) {
-                    // TODO: Ghost eaten logic
+                    console.log('Ghost eaten!');
+                    // Original starting house positions
+                    const startPositions = [
+                        { x: 13.5 * TILE_SIZE, y: 14 * TILE_SIZE }, // Blinky
+                        { x: 13.5 * TILE_SIZE, y: 17 * TILE_SIZE }, // Pinky
+                        { x: 11.5 * TILE_SIZE, y: 17 * TILE_SIZE }, // Inky
+                        { x: 15.5 * TILE_SIZE, y: 17 * TILE_SIZE }  // Clyde
+                    ];
+                    const pos = startPositions[index];
+                    ghost.reset(pos.x, pos.y);
+                    // TODO: Score update for eating ghost
                 } else {
                     console.log('Pac-Man caught!');
                     resetPositions();

@@ -84,6 +84,16 @@ export class Ghost {
         this.draw();
     }
 
+    public reset(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+        this.direction = Direction.NONE;
+        this.frightened = false;
+        this.setHouseTimer(60);
+        this.draw();
+        this.updateVisualPosition();
+    }
+
     public isFrightened(): boolean {
         return this.frightened;
     }

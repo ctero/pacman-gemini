@@ -57,4 +57,14 @@ describe('Ghost Base Class', () => {
         // but we can at least check a property if we add one.
         expect(ghost.isFrightened()).toBe(true);
     });
+
+    it('should reset position and state when reset() is called', () => {
+        const startX = ghost.x;
+        const startY = ghost.y;
+        ghost.x += 100;
+        ghost.setFrightened(true);
+        ghost.reset(startX, startY);
+        expect(ghost.x).toBe(startX);
+        expect(ghost.isFrightened()).toBe(false);
+    });
 });
