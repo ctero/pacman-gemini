@@ -20,6 +20,7 @@ describe('PacMan Collision and Environment', () => {
         pacman.setDirection(Direction.LEFT);
         pacman.update(1, maze);
         
+        // Should snap to 14 * TILE_SIZE because the move was blocked
         expect(pacman.x).toBe(14 * TILE_SIZE);
     });
 
@@ -66,6 +67,53 @@ describe('PacMan Collision and Environment', () => {
         
         expect(pacman.direction).toBe(Direction.LEFT);
         expect(pacman.x).toBeLessThan(10 * TILE_SIZE + 4);
+    });
+
+    it('should turn as soon as the path is clear (buffering)', () => {
+        const maze: MazeTile[][] = Array(36).fill(null).map(() => Array(28).fill(MazeTile.WALL));
+        // Corridor: (5,10) to (15,10). Turn UP at (10,10).
+        for (let x = 5; x <= 15; x++) maze[10][x] = MazeTile.EMPTY;
+        maze[9][10] = MazeTile.EMPTY;
+        
+        pacman.x = 8 * TILE_SIZE;
+        pacman.y = 10 * TILE_SIZE;
+        pacman.setDirection(Direction.RIGHT);
+        pacman.setNextDirection(Direction.UP);
+        
+        // Move towards intersection
+        let turned = false;
+        for (let i = 0; i < 30; i++) {
+            pacman.update(1, maze);
+            if (pacman.direction === Direction.UP) {
+                turned = true;
+                break;
+            }
+        }
+        
+        expect(turned).toBe(true);
+        // Should be at or near x=80 (10*8)
+        expect(pacman.x).toBe(10 * TILE_SIZE);
+    });
+
+    it('should turn immediately when hitting a wall if a valid nextDirection is buffered', () => {
+        const maze: MazeTile[][] = Array(36).fill(null).map(() => Array(28).fill(MazeTile.WALL));
+        // Corridor: (10,10) to (11,10). Wall at (12,10). Turn UP at (11,10).
+        maze[10][10] = MazeTile.EMPTY;
+        maze[10][11] = MazeTile.EMPTY;
+        maze[9][11] = MazeTile.EMPTY;
+        
+        pacman.x = 10 * TILE_SIZE + 4;
+        pacman.y = 10 * TILE_SIZE;
+        pacman.setDirection(Direction.RIGHT);
+        pacman.setNextDirection(Direction.UP);
+        
+        // Move until he hits the wall or turns
+        for (let i = 0; i < 15; i++) {
+            pacman.update(1, maze);
+        }
+        
+        expect(pacman.direction).toBe(Direction.UP);
+        expect(pacman.y).toBeLessThan(10 * TILE_SIZE);
     });
 
     it('REPRO: should not stop before a turn when buffering', () => {
