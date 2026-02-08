@@ -37,4 +37,23 @@ describe('FruitManager', () => {
         fruitManager.updateDotsEaten(71);
         expect(fruitManager.getActiveFruit()).toBeNull();
     });
+
+    it('should expire fruit after timer ends', () => {
+        fruitManager.updateDotsEaten(70);
+        expect(fruitManager.getActiveFruit()).not.toBeNull();
+        
+        fruitManager.update(9 * 60); // 9 seconds
+        expect(fruitManager.getActiveFruit()).not.toBeNull();
+        
+        fruitManager.update(0.5 * 60 + 1); // Exceed 9.5 seconds
+        expect(fruitManager.getActiveFruit()).toBeNull();
+    });
+
+    it('should clear fruit on reset (e.g., life loss)', () => {
+        fruitManager.updateDotsEaten(70);
+        expect(fruitManager.getActiveFruit()).not.toBeNull();
+        
+        fruitManager.reset();
+        expect(fruitManager.getActiveFruit()).toBeNull();
+    });
 });

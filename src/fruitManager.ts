@@ -18,6 +18,19 @@ export class FruitManager {
         this.checkSpawning();
     }
 
+    public update(frames: number) {
+        if (this.activeFruit) {
+            this.activeFruit.timer -= frames;
+            if (this.activeFruit.timer <= 0) {
+                this.activeFruit = null;
+            }
+        }
+    }
+
+    public reset() {
+        this.activeFruit = null;
+    }
+
     public setLevel(level: number) {
         this.currentLevel = level;
         this.resetLevelState();
