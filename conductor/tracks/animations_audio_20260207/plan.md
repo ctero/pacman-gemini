@@ -13,7 +13,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Visual Upgrades' (Protocol in workflow.md)
 
 ## Phase 2: Audio Integration
-- [ ] Task: Audio Manager
+- [x] Task: Audio Manager (0645e7e)
     - [ ] Write Tests: Sound loading and state tracking
     - [ ] Implement: global `AudioManager` with Howler.js
 - [ ] Task: Core Sound Effects
