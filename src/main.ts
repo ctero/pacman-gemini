@@ -138,6 +138,15 @@ async function init() {
         fruitManager.update(ticker.deltaTime);
         pacman.update(ticker.deltaTime, mazeState.getData());
 
+        const activeFruit = fruitManager.getActiveFruit();
+        if (activeFruit && fruitManager.checkCollision({ x: pacman.x, y: pacman.y })) {
+            console.log(`Fruit eaten: ${activeFruit.data.type}`);
+            scoringEngine.addFruit(activeFruit.data.points);
+            scoringUI.showScorePopup(pacman.x, pacman.y, activeFruit.data.points);
+            scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore(), gameState.lives);
+            fruitManager.clearFruit();
+        }
+
         const eaten = pacman.eat(mazeState);
         if (eaten !== MazeTile.EMPTY) {
             mazeRenderer.renderItems(mazeState.getData());
