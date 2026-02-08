@@ -1,6 +1,6 @@
 # Track Implementation Plan: lifecycle_progression_20260207
 
-## Phase 1: Life Management
+## Phase 1: Life Management [checkpoint: 954498d]
 - [x] Task: Life Counter and Display (51d6984)
     - [ ] Write Tests: Life decrement and Game Over trigger
     - [ ] Implement: Display Pac-Man icons at the bottom of the screen
