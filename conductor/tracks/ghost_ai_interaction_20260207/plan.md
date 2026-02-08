@@ -10,7 +10,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Ghost Foundations' (Protocol in workflow.md)
 
 ## Phase 2: Targeting and Movement
-- [ ] Task: Pursuit Algorithms (Chase Mode)
+- [x] Task: Pursuit Algorithms (Chase Mode) (84fd04b)
     - [ ] Write Tests: Target tile calculation for all four ghosts
     - [ ] Implement: Specific targeting logic for Blinky, Pinky, Inky, and Clyde
 - [ ] Task: Intersection Decision Logic
