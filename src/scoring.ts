@@ -2,13 +2,24 @@ export class ScoringEngine {
     private score: number = 0;
     private static highScore: number = 0;
     private ghostMultiplier: number = 1;
+    private dotsEaten: number = 0;
 
     public addDot() {
         this.score += 10;
+        this.dotsEaten++;
     }
 
     public addPowerPellet() {
         this.score += 50;
+        this.dotsEaten++;
+    }
+
+    public getDotsEaten(): number {
+        return this.dotsEaten;
+    }
+
+    public resetDotsEaten() {
+        this.dotsEaten = 0;
     }
 
     public addGhost() {

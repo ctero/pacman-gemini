@@ -12,6 +12,7 @@ import { MazeState } from './mazeState';
 import { ScoringEngine } from './scoring';
 import { ScoringUI } from './scoringUI';
 import { AudioManager } from './audioManager';
+import { FruitManager } from './fruitManager';
 
 async function init() {
     const app = new Application();
@@ -30,12 +31,13 @@ async function init() {
     const audioManager = new AudioManager();
     const gameState = new GameState();
     const scoringEngine = new ScoringEngine();
+    const fruitManager = new FruitManager();
     const scoringUI = new ScoringUI();
     scoringUI.addTo(app.stage);
     scoringUI.update(0, scoringEngine.getHighScore(), gameState.lives);
     scoringUI.showReady(true);
 
-    const mazeState = new MazeState(MAZE_DATA);
+    let mazeState = new MazeState(MAZE_DATA);
     const mazeRenderer = new MazeRenderer();
     mazeRenderer.render(mazeState.getData());
     mazeRenderer.addTo(app.stage);
@@ -71,6 +73,8 @@ async function init() {
             g.direction = Direction.NONE;
             g.setHouseTimer(60); // 1 second wait
         });
+
+        fruitManager.reset();
 
         if (gameState.lives > 0) {
             scoringUI.showReady(true);
@@ -131,6 +135,7 @@ async function init() {
         if (gameState.status !== GameStatus.PLAYING) return;
 
         gameState.update(ticker.deltaTime);
+        fruitManager.update(ticker.deltaTime);
         pacman.update(ticker.deltaTime, mazeState.getData());
 
         const eaten = pacman.eat(mazeState);
@@ -150,6 +155,7 @@ async function init() {
                     audioManager.play('chomp');
                 }
             }
+            fruitManager.updateDotsEaten(scoringEngine.getDotsEaten());
             scoringEngine.updateHighScore();
             scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore(), gameState.lives);
 
@@ -167,6 +173,8 @@ async function init() {
                     if (flashCount > 10) {
                         clearInterval(flashInterval);
                         gameState.nextLevel();
+                        scoringEngine.resetDotsEaten();
+                        fruitManager.setLevel(gameState.level);
                         mazeState = new MazeState(MAZE_DATA);
                         mazeRenderer.render(mazeState.getData());
                         resetPositions();

@@ -54,6 +54,7 @@ export class FruitManager {
 
     private spawnFruit() {
         const data = getFruitDataForLevel(this.currentLevel);
+        console.log(`Fruit spawned: ${data.type}`);
         this.activeFruit = {
             data,
             level: this.currentLevel,
