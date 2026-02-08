@@ -56,4 +56,24 @@ describe('FruitManager', () => {
         fruitManager.reset();
         expect(fruitManager.getActiveFruit()).toBeNull();
     });
+
+    it('should detect collision when Pac-Man is at the fruit position', () => {
+        fruitManager.updateDotsEaten(70);
+        const fruit = fruitManager.getActiveFruit();
+        expect(fruit).not.toBeNull();
+
+        const pacmanPos = { x: 13.5 * 8, y: 20 * 8 };
+        expect(fruitManager.checkCollision(pacmanPos)).toBe(true);
+    });
+
+    it('should not detect collision when Pac-Man is far away', () => {
+        fruitManager.updateDotsEaten(70);
+        const pacmanPos = { x: 0, y: 0 };
+        expect(fruitManager.checkCollision(pacmanPos)).toBe(false);
+    });
+
+    it('should not detect collision if no fruit is active', () => {
+        const pacmanPos = { x: 13.5 * 8, y: 20 * 8 };
+        expect(fruitManager.checkCollision(pacmanPos)).toBe(false);
+    });
 });

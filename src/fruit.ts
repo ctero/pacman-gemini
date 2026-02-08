@@ -1,3 +1,5 @@
+import { TILE_SIZE } from './constants';
+
 export enum FruitType {
     CHERRY = 'CHERRY',
     STRAWBERRY = 'STRAWBERRY',
@@ -13,6 +15,11 @@ export interface FruitData {
     type: FruitType;
     points: number;
 }
+
+export const FRUIT_SPAWN_POS = {
+    x: 13.5 * TILE_SIZE,
+    y: 20 * TILE_SIZE
+};
 
 export const LEVEL_FRUIT_DATA: Record<number, FruitData> = {
     1: { type: FruitType.CHERRY, points: 100 },

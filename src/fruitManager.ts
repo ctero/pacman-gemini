@@ -1,4 +1,4 @@
-import { FruitType, FruitData, getFruitDataForLevel } from './fruit';
+import { FruitType, FruitData, getFruitDataForLevel, FRUIT_SPAWN_POS } from './fruit';
 
 export interface ActiveFruit {
     data: FruitData;
@@ -12,6 +12,17 @@ export class FruitManager {
     private currentLevel: number = 1;
     private spawn1Triggered: boolean = false;
     private spawn2Triggered: boolean = false;
+
+    public checkCollision(pacmanPos: { x: number, y: number }): boolean {
+        if (!this.activeFruit) return false;
+
+        const dist = Math.sqrt(
+            Math.pow(pacmanPos.x - FRUIT_SPAWN_POS.x, 2) +
+            Math.pow(pacmanPos.y - FRUIT_SPAWN_POS.y, 2)
+        );
+
+        return dist < 4; // Collision threshold
+    }
 
     public updateDotsEaten(count: number) {
         this.dotsEaten = count;
