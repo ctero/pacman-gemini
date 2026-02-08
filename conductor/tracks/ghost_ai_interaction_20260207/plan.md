@@ -4,7 +4,7 @@
 - [x] Task: Ghost Base Class and Rendering (7b7e45e)
     - [ ] Write Tests: Ghost initialization and basic movement
     - [ ] Implement: Base `Ghost` class with Pixi.js representation
-- [ ] Task: Ghost House and Spawning
+- [x] Task: Ghost House and Spawning (18adb11)
     - [ ] Write Tests: Spawning logic and exit timers
     - [ ] Implement: Logic for ghosts waiting in and leaving the house
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Ghost Foundations' (Protocol in workflow.md)
