@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { Ghost } from './ghost';
 import { Direction } from './types';
 import { TILE_SIZE } from './constants';
+import { MazeTile } from './mazeData';
 
 describe('Ghost Base Class', () => {
     let ghost: Ghost;
@@ -16,45 +17,38 @@ describe('Ghost Base Class', () => {
     });
 
     it('should have a default speed slightly slower than Pac-Man', () => {
-        // Pac-Man is 2.0 in our prototype, ghosts are usually slightly slower
-        expect(ghost.speed).toBeLessThan(2.0);
+        // Arcade Level 1: Pac-Man 80%, Ghosts 75%
+        expect(ghost.getSpeed()).toBeLessThan(0.8 * (80/60));
     });
 
-    it('should move in the current direction', () => {
-        const maze = Array(36).fill(null).map(() => Array(28).fill(2)); // Empty path
+    it('should move in the current direction when out of house', () => {
+        const maze = Array(36).fill(null).map(() => Array(28).fill(MazeTile.EMPTY));
+        ghost.forceExitHouse();
         ghost.x = 14 * TILE_SIZE + 2; // Offset from center
         ghost.setDirection(Direction.LEFT);
+        ghost.setTarget({ x: 0, y: 14 * TILE_SIZE });
         ghost.update(maze);
         expect(ghost.x).toBeLessThan(14 * TILE_SIZE + 2);
     });
 
     it('should maintain tile alignment on the secondary axis', () => {
-        const maze = Array(36).fill(null).map(() => Array(28).fill(2)); // Empty path
+        const maze = Array(36).fill(null).map(() => Array(28).fill(MazeTile.EMPTY));
+        ghost.forceExitHouse();
         ghost.setDirection(Direction.UP);
         ghost.update(maze);
         expect(ghost.x).toBe(14 * TILE_SIZE);
     });
 
-    it('should stay in the ghost house if houseTimer is positive', () => {
-        const maze = Array(36).fill(null).map(() => Array(28).fill(2)); // Empty path
-        ghost.setHouseTimer(100);
+    it('should stay in the ghost house by default', () => {
+        const maze = Array(36).fill(null).map(() => Array(28).fill(MazeTile.EMPTY));
         ghost.setDirection(Direction.UP);
         ghost.update(maze);
-        // Should not have moved significantly if logic prevents exiting
         expect(ghost.isInHouse()).toBe(true);
-    });
-
-    it('should count down the house timer during updates', () => {
-        const maze = Array(36).fill(null).map(() => Array(28).fill(2)); // Empty path
-        ghost.setHouseTimer(10);
-        ghost.update(maze);
-        expect(ghost.getHouseTimer()).toBeLessThan(10);
+        expect(ghost.x).toBe(14 * TILE_SIZE);
     });
 
     it('should change color when frightened', () => {
         ghost.setFrightened(true);
-        // This is a bit indirect as we'd need to check graphics, 
-        // but we can at least check a property if we add one.
         expect(ghost.isFrightened()).toBe(true);
     });
 

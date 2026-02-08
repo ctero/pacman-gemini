@@ -174,14 +174,23 @@ export class Ghost {
         return this.frightened;
     }
 
+    public forceExitHouse() {
+        if (this.inHouse) {
+            this.houseTimer = 0;
+            this.inHouse = false;
+            // Snap to grid on exit
+            this.x = Math.round(this.x / TILE_SIZE) * TILE_SIZE;
+            this.y = Math.round(this.y / TILE_SIZE) * TILE_SIZE;
+        }
+    }
+
     public update(maze: MazeTile[][]) {
-        if (this.houseTimer > 0) {
-            this.houseTimer--;
-            if (this.houseTimer === 0) {
-                this.inHouse = false;
-                this.x = Math.round(this.x / TILE_SIZE) * TILE_SIZE;
-                this.y = Math.round(this.y / TILE_SIZE) * TILE_SIZE;
-            }
+        if (this.inHouse) {
+            // Simple up/down bounce while in house
+            this.animationFrame++;
+            this.draw();
+            // Just move y slightly for visual effect? 
+            // Or just stay still until forced exit.
             return;
         }
 

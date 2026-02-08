@@ -14,6 +14,7 @@ import { ScoringUI } from './scoringUI';
 import { AudioManager } from './audioManager';
 import { FruitManager } from './fruitManager';
 import { FruitRenderer } from './fruitRenderer';
+import { GhostHouseManager } from './ghostHouseManager';
 
 async function init() {
     const app = new Application();
@@ -34,6 +35,7 @@ async function init() {
     const scoringEngine = new ScoringEngine();
     const fruitManager = new FruitManager();
     const fruitRenderer = new FruitRenderer();
+    const ghostHouseManager = new GhostHouseManager();
     const scoringUI = new ScoringUI();
     scoringUI.addTo(app.stage);
     scoringUI.update(0, scoringEngine.getHighScore(), gameState.lives);
@@ -109,6 +111,7 @@ async function init() {
         fruitManager.reset();
 
         if (gameState.lives > 0) {
+            ghostHouseManager.resetForNewLife();
             scoringUI.showReady(true);
             gameState.status = GameStatus.READY;
         } else {
@@ -169,6 +172,13 @@ async function init() {
         gameState.update(ticker.deltaTime);
         fruitManager.update(ticker.deltaTime);
         updateGhostSpeeds();
+
+        ghosts.forEach((ghost, index) => {
+            if (ghost.isInHouse() && ghostHouseManager.shouldReleaseGhost(index)) {
+                ghost.forceExitHouse();
+            }
+        });
+
         const activeFruitForRender = fruitManager.getActiveFruit();
         fruitRenderer.render(activeFruitForRender ? activeFruitForRender.data.type : null);
         
@@ -201,6 +211,7 @@ async function init() {
                 }
             }
             fruitManager.updateDotsEaten(scoringEngine.getDotsEaten());
+            ghostHouseManager.updateDots(scoringEngine.getDotsEaten());
             scoringEngine.updateHighScore();
             scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore(), gameState.lives);
 
@@ -220,6 +231,7 @@ async function init() {
                         gameState.nextLevel();
                         scoringEngine.resetDotsEaten();
                         fruitManager.setLevel(gameState.level);
+                        ghostHouseManager.setLevel(gameState.level);
                         updatePacmanSpeeds();
                         updateGhostSpeeds();
                         mazeState = new MazeState(MAZE_DATA);
