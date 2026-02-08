@@ -1,6 +1,6 @@
 import { Application } from 'pixi.js';
 import { MazeRenderer } from './mazeRenderer';
-import { MAZE_DATA } from './mazeData';
+import { MAZE_DATA, MazeTile } from './mazeData';
 import { PacMan } from './pacman';
 import { Ghost } from './ghost';
 import { Direction } from './types';
@@ -8,6 +8,7 @@ import { TILE_SIZE } from './constants';
 import { GameState, GhostMode } from './gameState';
 import { getBlinkyTarget, getPinkyTarget, getInkyTarget, getClydeTarget } from './ghostTargeting';
 import { checkCollision } from './collision';
+import { MazeState } from './mazeState';
 
 async function init() {
     const app = new Application();
@@ -24,8 +25,9 @@ async function init() {
     document.getElementById('app')?.appendChild(app.canvas);
 
     const gameState = new GameState();
+    const mazeState = new MazeState(MAZE_DATA);
     const mazeRenderer = new MazeRenderer();
-    mazeRenderer.render(MAZE_DATA);
+    mazeRenderer.render(mazeState.getData());
     mazeRenderer.addTo(app.stage);
 
     const pacman = new PacMan(13.5 * TILE_SIZE, 26 * TILE_SIZE);
@@ -67,7 +69,13 @@ async function init() {
 
     app.ticker.add((ticker) => {
         gameState.update(ticker.deltaTime);
-        pacman.update(ticker.deltaTime, MAZE_DATA);
+        pacman.update(ticker.deltaTime, mazeState.getData());
+
+        const eaten = pacman.eat(mazeState);
+        if (eaten !== MazeTile.EMPTY) {
+            mazeRenderer.renderItems(mazeState.getData());
+            // TODO: Score update
+        }
 
         // Update Ghost AI Targets
         if (gameState.ghostMode === GhostMode.CHASE) {

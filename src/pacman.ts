@@ -2,6 +2,7 @@ import { Container, Graphics } from 'pixi.js';
 import { Direction } from './types';
 import { TILE_SIZE, MAZE_WIDTH } from './constants';
 import { MazeTile } from './mazeData';
+import { MazeState } from './mazeState';
 
 export class PacMan {
     public x: number;
@@ -35,6 +36,25 @@ export class PacMan {
 
     public setNextDirection(direction: Direction) {
         this.nextDirection = direction;
+    }
+
+    public eat(mazeState: MazeState): MazeTile {
+        const tileX = Math.round(this.x / TILE_SIZE);
+        const tileY = Math.round(this.y / TILE_SIZE);
+        
+        // Tolerance for eating: must be close to tile center
+        const offX = Math.abs(this.x - tileX * TILE_SIZE);
+        const offY = Math.abs(this.y - tileY * TILE_SIZE);
+        
+        if (offX < this.speed && offY < this.speed) {
+            const tile = mazeState.getTile(tileX, tileY);
+            if (tile === MazeTile.DOT || tile === MazeTile.POWER_PELLET) {
+                mazeState.removeLevelItem(tileX, tileY);
+                return tile;
+            }
+        }
+        
+        return MazeTile.EMPTY;
     }
 
     public update(_deltaTime: number, maze: MazeTile[][]) {
