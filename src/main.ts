@@ -167,9 +167,20 @@ async function init() {
             return;
         }
 
+        const wasPaused = gameState.isPaused();
+        gameState.update(ticker.deltaTime);
+        const isPaused = gameState.isPaused();
+
+        if (wasPaused && !isPaused) {
+            // Resume visibility after freeze-frame
+            pacman.setVisible(true);
+            ghosts.forEach(g => g.setVisible(true));
+        }
+
+        if (isPaused) return;
+
         if (gameState.status !== GameStatus.PLAYING) return;
 
-        gameState.update(ticker.deltaTime);
         fruitManager.update(ticker.deltaTime);
         updateGhostSpeeds();
 
@@ -281,19 +292,19 @@ async function init() {
                 if (ghost.isFrightened()) {
                     console.log('Ghost eaten!');
                     audioManager.play('eat_ghost');
+                    
+                    const score = 200 * scoringEngine.getGhostMultiplier();
                     scoringEngine.addGhost();
                     scoringEngine.updateHighScore();
                     scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore(), gameState.lives);
-                    
-                    const startPositions = [
-                        { x: 13.5 * TILE_SIZE, y: 14 * TILE_SIZE },
-                        { x: 13.5 * TILE_SIZE, y: 17 * TILE_SIZE },
-                        { x: 11.5 * TILE_SIZE, y: 17 * TILE_SIZE },
-                        { x: 15.5 * TILE_SIZE, y: 17 * TILE_SIZE }
-                    ];
-                    const pos = startPositions[index];
-                    ghost.reset(pos.x, pos.y);
-                } else {
+                    scoringUI.showScorePopup(ghost.x, ghost.y, score);
+
+                    // Freeze-frame
+                    gameState.pause(60);
+                    pacman.setVisible(false);
+                    ghost.setVisible(false);
+                    ghost.setEaten();
+                } else if (ghost.getState() !== GhostState.EATEN && ghost.getState() !== GhostState.ENTERING_HOUSE) {
                     console.log('Pac-Man caught!');
                     audioManager.stop('siren');
                     audioManager.stop('power_siren');

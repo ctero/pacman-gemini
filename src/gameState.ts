@@ -11,6 +11,7 @@ export class GameState {
     private timer: number = 0;
     private phaseIndex: number = 0;
     private frightenedTimer: number = 0;
+    private pauseTimer: number = 0;
     private previousMode: GhostMode = GhostMode.SCATTER;
     private levelData: ArcadeLevelData;
 
@@ -20,6 +21,14 @@ export class GameState {
 
     public getLevelData(): ArcadeLevelData {
         return this.levelData;
+    }
+
+    public pause(frames: number) {
+        this.pauseTimer = frames;
+    }
+
+    public isPaused(): boolean {
+        return this.pauseTimer > 0;
     }
 
     public startFrightenedMode() {
@@ -58,6 +67,11 @@ export class GameState {
 
     public update(frames: number) {
         if (this.status !== GameStatus.PLAYING) return;
+
+        if (this.pauseTimer > 0) {
+            this.pauseTimer -= frames;
+            return;
+        }
 
         if (this.ghostMode === GhostMode.FRIGHTENED) {
             this.frightenedTimer -= frames;

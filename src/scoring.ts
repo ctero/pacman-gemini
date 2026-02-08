@@ -38,6 +38,10 @@ export class ScoringEngine {
         this.ghostMultiplier = 1;
     }
 
+    public getGhostMultiplier(): number {
+        return this.ghostMultiplier;
+    }
+
     public getScore(): number {
         return this.score;
     }
