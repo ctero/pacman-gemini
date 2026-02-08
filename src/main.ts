@@ -1,6 +1,9 @@
 import { Application } from 'pixi.js';
 import { MazeRenderer } from './mazeRenderer';
 import { MAZE_DATA } from './mazeData';
+import { PacMan } from './pacman';
+import { Direction } from './types';
+import { TILE_SIZE } from './constants';
 
 async function init() {
     const app = new Application();
@@ -21,6 +24,22 @@ async function init() {
     const mazeRenderer = new MazeRenderer();
     mazeRenderer.render(MAZE_DATA);
     mazeRenderer.addTo(app.stage);
+
+    // Initial Pac-Man position (approx based on original)
+    const pacman = new PacMan(13.5 * TILE_SIZE, 23 * TILE_SIZE);
+    app.stage.addChild(pacman.container);
+
+    // Keyboard handling
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowUp') pacman.setNextDirection(Direction.UP);
+        if (e.key === 'ArrowDown') pacman.setNextDirection(Direction.DOWN);
+        if (e.key === 'ArrowLeft') pacman.setNextDirection(Direction.LEFT);
+        if (e.key === 'ArrowRight') pacman.setNextDirection(Direction.RIGHT);
+    });
+
+    app.ticker.add((ticker) => {
+        pacman.update(ticker.deltaTime, MAZE_DATA);
+    });
 
     console.log('Pac-Man engine initialized');
 }
