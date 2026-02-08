@@ -9,14 +9,14 @@
     - [ ] Implement: Collision check between Pac-Man and maze items
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Consumption Mechanics' (Protocol in workflow.md)
 
-## Phase 2: Power Pellets and Ghost Interaction
+## Phase 2: Power Pellets and Ghost Interaction [checkpoint: 25bdfa5]
 - [x] Task: Trigger Frightened Mode (ed15e1e)
     - [ ] Write Tests: Global mode switch on pellet consumption
     - [ ] Implement: Logic to set all ghosts to FRIGHTENED mode
 - [x] Task: Eating Ghosts (ce826f5)
     - [ ] Write Tests: Scoring and ghost reset when eaten
     - [ ] Implement: Logic to handle Pac-Man overlapping a frightened ghost
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Power Pellets and Ghost Interaction' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Power Pellets and Ghost Interaction' (Protocol in workflow.md)
 
 ## Phase 3: Scoring and UI
 - [ ] Task: Scoring Engine
