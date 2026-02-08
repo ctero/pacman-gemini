@@ -1,0 +1,8 @@
+{
+  "track_id": "navigation_buffering_fix_20260208",
+  "type": "bug",
+  "status": "new",
+  "created_at": "2026-02-08T12:00:00Z",
+  "updated_at": "2026-02-08T12:00:00Z",
+  "description": "Pac-Man stops just short of a turn when a direction is buffered (pressed early)."
+}
