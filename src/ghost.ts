@@ -218,35 +218,6 @@ export class Ghost {
         return maze[nextY][nextX] !== MazeTile.WALL;
     }
 
-    private draw() {
-        this.graphics.clear();
-        
-        const bodyColor = this.frightened ? 0x2121ff : this.color;
-        const eyeColor = this.frightened ? 0xffb8ff : 0xffffff;
-        const pupilColor = this.frightened ? 0xffb8ff : 0x0000ff;
-
-        // Simple ghost shape (square with a rounded top)
-        this.graphics.rect(0, 4, 8, 4);
-        this.graphics.circle(4, 4, 4);
-        this.graphics.fill(bodyColor);
-        
-        if (this.frightened) {
-            // Squiggly mouth or just different eyes for frightened
-            this.graphics.rect(1, 6, 6, 1);
-            this.graphics.fill(eyeColor);
-        } else {
-            // Eyes (white)
-            this.graphics.circle(2, 3, 1.5);
-            this.graphics.circle(6, 3, 1.5);
-            this.graphics.fill(eyeColor);
-
-            // Pupils (blue)
-            this.graphics.circle(2, 3, 0.5);
-            this.graphics.circle(6, 3, 0.5);
-            this.graphics.fill(pupilColor);
-        }
-    }
-
     private isAtTileCenter(): boolean {
         const offX = Math.abs((this.x % TILE_SIZE));
         const offY = Math.abs((this.y % TILE_SIZE));

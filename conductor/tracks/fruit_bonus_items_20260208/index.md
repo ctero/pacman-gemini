@@ -1,4 +1,4 @@
-# Track core_engine_maze_20260207 Context
+# Track fruit_bonus_items_20260208 Context
 
 - [Specification](./spec.md)
 - [Implementation Plan](./plan.md)

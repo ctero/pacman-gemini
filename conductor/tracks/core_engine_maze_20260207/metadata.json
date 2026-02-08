@@ -1,8 +1,0 @@
-{
-  "track_id": "core_engine_maze_20260207",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-02-07T12:00:00Z",
-  "updated_at": "2026-02-07T12:00:00Z",
-  "description": "Build the core engine and maze: Implement Pixi.js rendering, Pac-Man movement, the maze layout with dots, and basic collision detection."
-}

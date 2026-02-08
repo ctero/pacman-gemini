@@ -1,11 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { GameState, GhostMode } from './gameState';
+import { GameState, GhostMode, GameStatus } from './gameState';
 
 describe('GameState Mode Timer', () => {
     let state: GameState;
 
     beforeEach(() => {
         state = new GameState();
+        state.status = GameStatus.PLAYING;
     });
 
     it('should start in SCATTER mode', () => {

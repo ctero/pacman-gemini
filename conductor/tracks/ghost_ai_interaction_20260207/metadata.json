@@ -1,8 +1,0 @@
-{
-  "track_id": "ghost_ai_interaction_20260207",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-02-07T23:30:00Z",
-  "updated_at": "2026-02-07T23:30:00Z",
-  "description": "Ghost AI and Interaction: Implement the four original ghosts with their unique targeting algorithms, mode switching, and collision detection."
-}
