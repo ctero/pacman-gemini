@@ -7,7 +7,7 @@
 - [x] Task: Ghost Animation (9140bb7)
     - [ ] Write Tests: Eye direction mapping
     - [ ] Implement: Animated ghost legs and directional eyes
-- [ ] Task: Frightened/Flashing States
+- [x] Task: Frightened/Flashing States (4c8c92a)
     - [ ] Write Tests: Flashing trigger timing
     - [ ] Implement: Blue/White flashing for frightened ghosts
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Visual Upgrades' (Protocol in workflow.md)
