@@ -4,7 +4,7 @@
 - [x] Task: Pac-Man Animation (7559820)
     - [ ] Write Tests: Rotation logic based on direction
     - [ ] Implement: Replace circle with animated chomping sprite
-- [ ] Task: Ghost Animation
+- [x] Task: Ghost Animation (9140bb7)
     - [ ] Write Tests: Eye direction mapping
     - [ ] Implement: Animated ghost legs and directional eyes
 - [ ] Task: Frightened/Flashing States
