@@ -5,7 +5,6 @@ import { TILE_SIZE } from './constants';
 
 describe('Ghost Targeting Logic', () => {
     const pacmanPos: Point = { x: 14 * TILE_SIZE, y: 17 * TILE_SIZE };
-    const pacmanDir = Direction.LEFT;
 
     it('Blinky should target Pac-Man directly', () => {
         const target = getBlinkyTarget(pacmanPos);

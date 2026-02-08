@@ -3,7 +3,7 @@ import { MazeRenderer } from './mazeRenderer';
 import { MAZE_DATA, MazeTile } from './mazeData';
 import { PacMan } from './pacman';
 import { Ghost } from './ghost';
-import { Direction } from './types';
+import { Direction, GhostState } from './types';
 import { TILE_SIZE } from './constants';
 import { GameState, GhostMode, GameStatus } from './gameState';
 import { getBlinkyTarget, getPinkyTarget, getInkyTarget, getClydeTarget } from './ghostTargeting';
@@ -184,8 +184,8 @@ async function init() {
         fruitManager.update(ticker.deltaTime);
         updateGhostSpeeds();
 
-        ghosts.forEach((ghost, index) => {
-            if (ghost.isInHouse() && ghostHouseManager.shouldReleaseGhost(index)) {
+        ghosts.forEach((ghost) => {
+            if (ghost.isInHouse() && ghostHouseManager.shouldReleaseGhost(ghosts.indexOf(ghost))) {
                 ghost.forceExitHouse();
             }
         });
@@ -286,7 +286,7 @@ async function init() {
             clyde.setTarget({ x: 0, y: 34 * TILE_SIZE });             // Bottom Left
         }
 
-        ghosts.forEach((ghost, index) => {
+        ghosts.forEach((ghost) => {
             ghost.update(mazeState.getData());
             if (checkCollision(pacman, ghost)) {
                 if (ghost.isFrightened()) {

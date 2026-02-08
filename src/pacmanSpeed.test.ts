@@ -3,7 +3,6 @@ import { PacMan } from './pacman';
 import { Direction } from './types';
 import { TILE_SIZE } from './constants';
 import { MazeTile } from './mazeData';
-import { MazeState } from './mazeState';
 
 describe('PacMan Speed and Eating Penalty', () => {
     let pacman: PacMan;

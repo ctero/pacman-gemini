@@ -100,11 +100,11 @@ export class Ghost {
         this.graphics.clear();
         
         const isEyesOnly = this.state === GhostState.EATEN || this.state === GhostState.ENTERING_HOUSE;
+        let eyeColor = this.frightened && !isEyesOnly ? 0xffb8ff : 0xffffff;
+        let pupilColor = this.frightened && !isEyesOnly ? 0xffb8ff : 0x0000ff;
 
         if (!isEyesOnly) {
             let bodyColor = this.frightened ? 0x2121ff : this.color;
-            let eyeColor = this.frightened ? 0xffb8ff : 0xffffff;
-            let pupilColor = this.frightened ? 0xffb8ff : 0x0000ff;
 
             // Flashing logic (last 2s): switch between blue and white every 10 frames
             if (this.flashing) {
@@ -138,9 +138,6 @@ export class Ghost {
             }
             this.graphics.fill(bodyColor);
         }
-
-        let eyeColor = this.frightened && !isEyesOnly ? 0xffb8ff : 0xffffff;
-        let pupilColor = this.frightened && !isEyesOnly ? 0xffb8ff : 0x0000ff;
 
         if (this.frightened && !isEyesOnly) {
             // Squiggly mouth for frightened

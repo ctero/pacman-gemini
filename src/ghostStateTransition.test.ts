@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Ghost } from './ghost';
-import { GhostState, Direction } from './types';
+import { GhostState } from './types';
 import { TILE_SIZE } from './constants';
 
 describe('Ghost State Transitions', () => {

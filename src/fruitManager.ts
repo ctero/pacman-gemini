@@ -1,4 +1,4 @@
-import { FruitType, FruitData, getFruitDataForLevel, FRUIT_SPAWN_POS } from './fruit';
+import { FruitData, getFruitDataForLevel, FRUIT_SPAWN_POS } from './fruit';
 
 export interface ActiveFruit {
     data: FruitData;

@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { PacMan } from './pacman';
 import { Direction } from './types';
 import { TILE_SIZE } from './constants';
-import { MAZE_DATA, MazeTile } from './mazeData';
+import { MazeTile } from './mazeData';
 
 describe('PacMan Collision and Environment', () => {
     let pacman: PacMan;

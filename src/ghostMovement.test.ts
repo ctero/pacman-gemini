@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { chooseNextDirection } from './ghostMovement';
 import { Direction, Point } from './types';
-import { MAZE_DATA, MazeTile } from './mazeData';
+import { MazeTile } from './mazeData';
 
 describe('Ghost Intersection Logic', () => {
     // Empty maze for testing

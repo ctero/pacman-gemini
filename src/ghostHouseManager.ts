@@ -3,7 +3,6 @@ export class GhostHouseManager {
     private dotsEatenInLevel: number = 0;
     private globalCounterActive: boolean = false;
     private globalDots: number = 0;
-    private personalDots: number[] = [0, 0, 0, 0]; // Blinky, Pinky, Inky, Clyde
     
     // Personal dot limits per level
     // Index 1: Pinky, 2: Inky, 3: Clyde
@@ -21,7 +20,6 @@ export class GhostHouseManager {
         this.currentLevel = level;
         this.dotsEatenInLevel = 0;
         this.globalCounterActive = false;
-        this.personalDots = [0, 0, 0, 0];
     }
 
     public resetForNewLife() {

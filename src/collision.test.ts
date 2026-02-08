@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { checkCollision } from './collision';
 import { PacMan } from './pacman';
 import { Ghost } from './ghost';
-import { TILE_SIZE } from './constants';
 
 describe('Pac-Man and Ghost Collision', () => {
     it('should detect collision when overlapping', () => {

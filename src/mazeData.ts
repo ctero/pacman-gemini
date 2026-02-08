@@ -11,7 +11,6 @@ const W = MazeTile.WALL;
 const d = MazeTile.DOT;
 const P = MazeTile.POWER_PELLET;
 const E = MazeTile.EMPTY;
-const G = MazeTile.GHOST_HOUSE;
 const D = MazeTile.GHOST_HOUSE_DOOR;
 
 export const MAZE_DATA: MazeTile[][] = [
