@@ -13,7 +13,7 @@
 - [x] Task: Pursuit Algorithms (Chase Mode) (84fd04b)
     - [ ] Write Tests: Target tile calculation for all four ghosts
     - [ ] Implement: Specific targeting logic for Blinky, Pinky, Inky, and Clyde
-- [ ] Task: Intersection Decision Logic
+- [x] Task: Intersection Decision Logic (269a1a1)
     - [ ] Write Tests: Direction selection based on distance to target
     - [ ] Implement: Logic for ghosts choosing the shortest path to their target at intersections
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Targeting and Movement' (Protocol in workflow.md)
