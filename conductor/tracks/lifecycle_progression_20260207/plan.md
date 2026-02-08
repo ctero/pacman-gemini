@@ -8,14 +8,14 @@
     - [ ] Implement: Text overlays for "Ready!" and "Game Over"
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Life Management' (Protocol in workflow.md)
 
-## Phase 2: Level Progression
+## Phase 2: Level Progression [checkpoint: 1686f90]
 - [x] Task: Level Completion Logic (837c2d4)
     - [ ] Write Tests: Detecting empty maze and incrementing level
     - [ ] Implement: Flash effect and maze reset
 - [ ] Task: Scaling Difficulty
     - [ ] Write Tests: Level-based speed and timer values
     - [ ] Implement: Adjust ghost behavior based on current level
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Level Progression' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Level Progression' (Protocol in workflow.md)
 
 ## Phase 3: Game Loop Integration
 - [ ] Task: Global Lifecycle State Machine
