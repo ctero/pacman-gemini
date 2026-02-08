@@ -1,6 +1,6 @@
 # Track Implementation Plan: animations_audio_20260207
 
-## Phase 1: Visual Upgrades
+## Phase 1: Visual Upgrades [checkpoint: 8c985c9]
 - [x] Task: Pac-Man Animation (7559820)
     - [ ] Write Tests: Rotation logic based on direction
     - [ ] Implement: Replace circle with animated chomping sprite
@@ -10,7 +10,7 @@
 - [x] Task: Frightened/Flashing States (4c8c92a)
     - [ ] Write Tests: Flashing trigger timing
     - [ ] Implement: Blue/White flashing for frightened ghosts
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Visual Upgrades' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Visual Upgrades' (Protocol in workflow.md)
 
 ## Phase 2: Audio Integration
 - [ ] Task: Audio Manager
