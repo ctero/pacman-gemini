@@ -46,6 +46,13 @@ async function init() {
     fruitRenderer.addTo(app.stage);
 
     const pacman = new PacMan(13.5 * TILE_SIZE, 26 * TILE_SIZE);
+    const updatePacmanSpeeds = () => {
+        const data = gameState.getLevelData();
+        const arcadeBasePixelSpeed = (80 / 60); 
+        pacman.setBaseSpeed(data.pacmanSpeed * arcadeBasePixelSpeed);
+        pacman.setEatingSpeed(data.pacmanEatingSpeed * arcadeBasePixelSpeed);
+    };
+    updatePacmanSpeeds();
     app.stage.addChild(pacman.container);
 
     const blinky = new Ghost(13.5 * TILE_SIZE, 14 * TILE_SIZE, 0xff0000);
@@ -190,6 +197,7 @@ async function init() {
                         gameState.nextLevel();
                         scoringEngine.resetDotsEaten();
                         fruitManager.setLevel(gameState.level);
+                        updatePacmanSpeeds();
                         mazeState = new MazeState(MAZE_DATA);
                         mazeRenderer.render(mazeState.getData());
                         resetPositions();

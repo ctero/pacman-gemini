@@ -6,6 +6,20 @@ export enum Direction {
     RIGHT = 4,
 }
 
+export enum GhostMode {
+    SCATTER = 0,
+    CHASE = 1,
+    FRIGHTENED = 2,
+    EATEN = 3
+}
+
+export enum GameStatus {
+    READY = 0,
+    PLAYING = 1,
+    LEVEL_COMPLETE = 2,
+    GAME_OVER = 3
+}
+
 export interface Point {
     x: number;
     y: number;

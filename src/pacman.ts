@@ -9,7 +9,8 @@ export class PacMan {
     public y: number;
     public direction: Direction = Direction.NONE;
     public nextDirection: Direction = Direction.NONE;
-    public speed: number = 2.0;
+    private baseSpeed: number = 0.8 * (80 / 60); // Default Level 1 arcade speed
+    private eatingSpeed: number = 0.71 * (80 / 60);
     private animationFrame: number = 0;
     
     public container: Container;
@@ -26,6 +27,18 @@ export class PacMan {
         this.graphics.pivot.set(4, 4);
         this.graphics.position.set(4, 4);
         this.updateVisualPosition();
+    }
+
+    public setBaseSpeed(speed: number) {
+        this.baseSpeed = speed;
+    }
+
+    public setEatingSpeed(speed: number) {
+        this.eatingSpeed = speed;
+    }
+
+    public getSpeed(): number {
+        return this.baseSpeed;
     }
 
     public getRotation(): number {
@@ -68,7 +81,8 @@ export class PacMan {
         const offX = Math.abs(this.x - tileX * TILE_SIZE);
         const offY = Math.abs(this.y - tileY * TILE_SIZE);
         
-        if (offX < this.speed && offY < this.speed) {
+        const currentSpeed = this.getSpeed();
+        if (offX < currentSpeed && offY < currentSpeed) {
             const tile = mazeState.getTile(tileX, tileY);
             if (tile === MazeTile.DOT || tile === MazeTile.POWER_PELLET) {
                 mazeState.removeLevelItem(tileX, tileY);
@@ -79,26 +93,41 @@ export class PacMan {
         return MazeTile.EMPTY;
     }
 
+    private isEating(maze: MazeTile[][]): boolean {
+        const tileX = Math.round(this.x / TILE_SIZE);
+        const tileY = Math.round(this.y / TILE_SIZE);
+        
+        // Safety check for bounds
+        if (tileY < 0 || tileY >= maze.length || tileX < 0 || tileX >= maze[0].length) {
+            return false;
+        }
+
+        const tile = maze[tileY][tileX];
+        return tile === MazeTile.DOT || tile === MazeTile.POWER_PELLET;
+    }
+
     public update(_deltaTime: number, maze: MazeTile[][]) {
+        const currentSpeed = this.isEating(maze) ? this.eatingSpeed : this.baseSpeed;
+
         // 1. Try to change to nextDirection if possible (pre-turn / intersection)
-        if (this.nextDirection !== Direction.NONE && this.canMove(this.nextDirection, maze)) {
+        if (this.nextDirection !== Direction.NONE && this.canMove(this.nextDirection, maze, currentSpeed)) {
             // Only allow turning if we are closely aligned with a tile center
-            if (this.isAlignedWithTile()) {
+            if (this.isAlignedWithTile(currentSpeed)) {
                 this.direction = this.nextDirection;
                 this.nextDirection = Direction.NONE;
             }
         }
 
         // 2. Move in current direction if not blocked
-        if (this.canMove(this.direction, maze)) {
+        if (this.canMove(this.direction, maze, currentSpeed)) {
             if (this.direction === Direction.LEFT) {
-                this.x -= this.speed;
+                this.x -= currentSpeed;
             } else if (this.direction === Direction.RIGHT) {
-                this.x += this.speed;
+                this.x += currentSpeed;
             } else if (this.direction === Direction.UP) {
-                this.y -= this.speed;
+                this.y -= currentSpeed;
             } else if (this.direction === Direction.DOWN) {
-                this.y += this.speed;
+                this.y += currentSpeed;
             }
             
             // Only animate if moving
@@ -124,17 +153,17 @@ export class PacMan {
         this.updateVisualPosition();
     }
 
-    private canMove(dir: Direction, maze: MazeTile[][]): boolean {
+    private canMove(dir: Direction, maze: MazeTile[][], speed: number): boolean {
         if (dir === Direction.NONE) return false;
 
         // Calculate next tile based on direction
         let nextX = this.x;
         let nextY = this.y;
 
-        if (dir === Direction.LEFT) nextX -= this.speed;
-        if (dir === Direction.RIGHT) nextX += this.speed;
-        if (dir === Direction.UP) nextY -= this.speed;
-        if (dir === Direction.DOWN) nextY += this.speed;
+        if (dir === Direction.LEFT) nextX -= speed;
+        if (dir === Direction.RIGHT) nextX += speed;
+        if (dir === Direction.UP) nextY -= speed;
+        if (dir === Direction.DOWN) nextY += speed;
 
         // Check corner points of the bounding box (slightly smaller than tile)
         const margin = 1;
@@ -162,8 +191,8 @@ export class PacMan {
         return true;
     }
 
-    private isAlignedWithTile(): boolean {
-        const tolerance = this.speed;
+    private isAlignedWithTile(speed: number): boolean {
+        const tolerance = speed;
         const offX = Math.abs(this.x % TILE_SIZE);
         const offY = Math.abs(this.y % TILE_SIZE);
         return offX < tolerance && offY < tolerance;
