@@ -13,7 +13,7 @@
 - [x] Task: Trigger Frightened Mode (ed15e1e)
     - [ ] Write Tests: Global mode switch on pellet consumption
     - [ ] Implement: Logic to set all ghosts to FRIGHTENED mode
-- [ ] Task: Eating Ghosts
+- [x] Task: Eating Ghosts (ce826f5)
     - [ ] Write Tests: Scoring and ghost reset when eaten
     - [ ] Implement: Logic to handle Pac-Man overlapping a frightened ghost
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Power Pellets and Ghost Interaction' (Protocol in workflow.md)
