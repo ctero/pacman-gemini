@@ -1,7 +1,7 @@
 # Track Implementation Plan: ghost_ai_interaction_20260207
 
 ## Phase 1: Ghost Foundations
-- [ ] Task: Ghost Base Class and Rendering
+- [x] Task: Ghost Base Class and Rendering (7b7e45e)
     - [ ] Write Tests: Ghost initialization and basic movement
     - [ ] Implement: Base `Ghost` class with Pixi.js representation
 - [ ] Task: Ghost House and Spawning
