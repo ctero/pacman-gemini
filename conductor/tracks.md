@@ -1,1 +1,1 @@
-# Project Tracks\n\nThis file tracks all major tracks for the project. Each track has its own detailed plan in its respective folder.\n\n---\n\n- [x] **Track: Build the core engine and maze**\n  *Link: [./tracks/core_engine_maze_20260207/](./tracks/core_engine_maze_20260207/)*
+# Project Tracks\n\nThis file tracks all major tracks for the project. Each track has its own detailed plan in its respective folder.
