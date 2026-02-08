@@ -7,7 +7,7 @@
 - [x] Task: Implement Spawning Triggers (20f2fd7)
     - [ ] Write Tests: Fruit spawn event at 70 and 170 dots eaten
     - [ ] Implement: Logic in `GameState` or a new `FruitManager` to track dot count and trigger spawning
-- [ ] Task: Implement Expiration and Lifecycle
+- [x] Task: Implement Expiration and Lifecycle (4ed8cd3)
     - [ ] Write Tests: Fruit disappears after timer (9.5s) or on Pac-Man death
     - [ ] Implement: Timer-based despawning and reset logic during `loseLife`
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Data and Core Spawning' (Protocol in workflow.md)
