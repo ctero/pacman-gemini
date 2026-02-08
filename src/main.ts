@@ -97,6 +97,13 @@ async function init() {
             ghosts.forEach(g => {
                 if (g.isFrightened()) {
                     g.setFrightened(false);
+                    g.setFlashing(false);
+                }
+            });
+        } else if (gameState.isFlashing()) {
+            ghosts.forEach(g => {
+                if (g.isFrightened()) {
+                    g.setFlashing(true);
                 }
             });
         }

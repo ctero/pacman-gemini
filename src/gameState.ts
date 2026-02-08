@@ -34,6 +34,10 @@ export class GameState {
         this.frightenedTimer = 6 * 60; // 6 seconds at 60fps
     }
 
+    public isFlashing(): boolean {
+        return this.ghostMode === GhostMode.FRIGHTENED && this.frightenedTimer < 2 * 60; // Flash last 2 seconds
+    }
+
     public update(frames: number) {
         if (this.ghostMode === GhostMode.FRIGHTENED) {
             this.frightenedTimer -= frames;

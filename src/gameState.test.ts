@@ -31,4 +31,13 @@ describe('GameState Mode Timer', () => {
         state.update(6 * 60 + 1);
         expect(state.ghostMode).not.toBe(GhostMode.FRIGHTENED);
     });
+
+    it('should indicate flashing when frightened timer is low', () => {
+        state.startFrightenedMode();
+        expect(state.isFlashing()).toBe(false);
+        
+        // Timer starts at 360 frames. Flashing usually starts last 2s (120 frames).
+        state.update(241); // 360 - 241 = 119
+        expect(state.isFlashing()).toBe(true);
+    });
 });

@@ -13,6 +13,7 @@ export class Ghost {
     private houseTimer: number = 0;
     private inHouse: boolean = true;
     private frightened: boolean = false;
+    private flashing: boolean = false;
     private animationFrame: number = 0;
     
     public container: Container;
@@ -34,12 +35,27 @@ export class Ghost {
         return this.direction === Direction.NONE ? Direction.LEFT : this.direction;
     }
 
+    public setFlashing(flashing: boolean) {
+        this.flashing = flashing;
+        this.draw();
+    }
+
     private draw() {
         this.graphics.clear();
         
-        const bodyColor = this.frightened ? 0x2121ff : this.color;
-        const eyeColor = this.frightened ? 0xffb8ff : 0xffffff;
-        const pupilColor = this.frightened ? 0xffb8ff : 0x0000ff;
+        let bodyColor = this.frightened ? 0x2121ff : this.color;
+        let eyeColor = this.frightened ? 0xffb8ff : 0xffffff;
+        let pupilColor = this.frightened ? 0xffb8ff : 0x0000ff;
+
+        // Flashing logic (last 2s): switch between blue and white every 10 frames
+        if (this.flashing) {
+            const flashFrame = Math.floor(this.animationFrame / 10) % 2;
+            if (flashFrame === 1) {
+                bodyColor = 0xffffff;
+                eyeColor = 0xff0000;
+                pupilColor = 0xff0000;
+            }
+        }
 
         // Simple ghost shape (square with a rounded top)
         this.graphics.rect(0, 4, 8, 4);
