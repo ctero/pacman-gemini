@@ -111,10 +111,11 @@ export class PacMan {
 
         // 1. Try to change to nextDirection if possible (pre-turn / intersection)
         if (this.nextDirection !== Direction.NONE && this.canMove(this.nextDirection, maze, currentSpeed)) {
-            // Only allow turning if we are closely aligned with a tile center
             if (this.isAlignedWithTile(currentSpeed)) {
                 this.direction = this.nextDirection;
                 this.nextDirection = Direction.NONE;
+                // Snap to grid when turning to prevent drifting
+                this.snapToTile();
             }
         }
 
@@ -184,9 +185,12 @@ export class PacMan {
             const tileX = Math.floor(p.x / TILE_SIZE);
             const tileY = Math.floor(p.y / TILE_SIZE);
 
-            // Tunnels are special: outside maze is EMPTY
-            if (tileX < 0 || tileX >= 28) continue;
-            if (tileY < 0 || tileY >= 36) return true; // Safety
+            // Restrict horizontal exit points to the tunnel row (17)
+            if (tileX < 0 || tileX >= 28) {
+                if (tileY === 17) continue;
+                return false;
+            }
+            if (tileY < 0 || tileY >= 36) return true; // Safety for header/footer
 
             const tile = maze[tileY][tileX];
             if (tile === MazeTile.WALL || tile === MazeTile.GHOST_HOUSE_DOOR) {

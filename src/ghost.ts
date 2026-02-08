@@ -236,6 +236,7 @@ export class Ghost {
 
         // Decision point: center of tile
         if (this.isAtTileCenter(currentSpeed)) {
+            const oldDir = this.direction;
             if (this.frightened) {
                 this.direction = this.chooseRandomDirection(maze);
             } else {
@@ -245,6 +246,12 @@ export class Ghost {
                     this.target,
                     maze
                 );
+            }
+
+            // Snap to grid on direction change to prevent clipping/drifting
+            if (this.direction !== oldDir) {
+                this.x = Math.round(this.x / TILE_SIZE) * TILE_SIZE;
+                this.y = Math.round(this.y / TILE_SIZE) * TILE_SIZE;
             }
         }
 
@@ -298,7 +305,12 @@ export class Ghost {
         if (dir === Direction.LEFT) nextX--;
         if (dir === Direction.RIGHT) nextX++;
 
-        if (nextX < 0 || nextX >= 28 || nextY < 0 || nextY >= 36) return true;
+        // Restrict horizontal exit points to the tunnel row (17)
+        if (nextX < 0 || nextX >= 28) {
+            if (tileY === 17) return true;
+            return false;
+        }
+        if (nextY < 0 || nextY >= 36) return true;
         return maze[nextY][nextX] !== MazeTile.WALL;
     }
 
