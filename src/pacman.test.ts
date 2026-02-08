@@ -54,4 +54,45 @@ describe('PacMan Collision and Environment', () => {
         pacman.setDirection(Direction.UP);
         expect(pacman.getRotation()).toBe(-Math.PI / 2);
     });
+
+    it('should reverse immediately without waiting for tile alignment', () => {
+        const maze: MazeTile[][] = Array(36).fill(null).map(() => Array(28).fill(MazeTile.EMPTY));
+        pacman.x = 10 * TILE_SIZE + 4; // Middle of tile 10
+        pacman.y = 10 * TILE_SIZE;
+        pacman.setDirection(Direction.RIGHT);
+        pacman.setNextDirection(Direction.LEFT);
+        
+        pacman.update(1, maze);
+        
+        expect(pacman.direction).toBe(Direction.LEFT);
+        expect(pacman.x).toBeLessThan(10 * TILE_SIZE + 4);
+    });
+
+    it('REPRO: should not stop before a turn when buffering', () => {
+        // Corridor from (5, 10) to (10, 10). Turn UP at (10, 10). Wall at (11, 10).
+        const maze: MazeTile[][] = Array(36).fill(null).map(() => Array(28).fill(MazeTile.WALL));
+        for (let x = 5; x <= 10; x++) maze[10][x] = MazeTile.EMPTY;
+        maze[9][10] = MazeTile.EMPTY; // The turn UP
+        
+        pacman.x = 8 * TILE_SIZE;
+        pacman.y = 10 * TILE_SIZE;
+        pacman.setDirection(Direction.RIGHT);
+        pacman.setNextDirection(Direction.UP);
+        
+        let lastX = pacman.x;
+        let turned = false;
+        for (let i = 0; i < 30; i++) {
+            pacman.update(1, maze);
+            if (pacman.direction === Direction.UP) {
+                turned = true;
+                break;
+            }
+            // If he is still moving RIGHT, he should have progressed
+            if (pacman.x <= lastX) {
+                throw new Error(`Pac-Man stopped at x=${pacman.x} (tile ${pacman.x/TILE_SIZE}) before turning. lastX was ${lastX}`);
+            }
+            lastX = pacman.x;
+        }
+        expect(turned).toBe(true);
+    });
 });

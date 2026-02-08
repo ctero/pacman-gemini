@@ -109,42 +109,47 @@ export class PacMan {
     public update(_deltaTime: number, maze: MazeTile[][]) {
         const currentSpeed = this.isEating(maze) ? this.eatingSpeed : this.baseSpeed;
 
-        // 1. Try to change to nextDirection if possible (pre-turn / intersection)
+        // 1. Handle Reversals (Instant)
+        if (this.nextDirection !== Direction.NONE && this.isOpposite(this.direction, this.nextDirection)) {
+            this.direction = this.nextDirection;
+            this.nextDirection = Direction.NONE;
+        }
+
+        // 2. Try to turn at intersection
         if (this.nextDirection !== Direction.NONE && this.canMove(this.nextDirection, maze, currentSpeed)) {
-            if (this.isAlignedWithTile(currentSpeed)) {
+            // Increased tolerance for turning: 3 pixels (arcade-style)
+            // This allows turning as soon as the path is open and we're close to center
+            if (this.isNearCenter(3)) {
                 this.direction = this.nextDirection;
                 this.nextDirection = Direction.NONE;
-                // Snap to grid when turning to prevent drifting
                 this.snapToTile();
             }
         }
 
-        // 2. Move in current direction if not blocked
+        // 3. Move in current direction
         if (this.canMove(this.direction, maze, currentSpeed)) {
-            if (this.direction === Direction.LEFT) {
-                this.x -= currentSpeed;
-            } else if (this.direction === Direction.RIGHT) {
-                this.x += currentSpeed;
-            } else if (this.direction === Direction.UP) {
-                this.y -= currentSpeed;
-            } else if (this.direction === Direction.DOWN) {
-                this.y += currentSpeed;
-            }
-            
-            // Only animate if moving
-            if (this.direction !== Direction.NONE) {
-                this.animationFrame++;
+            this.move(this.direction, currentSpeed);
+            this.animationFrame++;
+            this.draw();
+        } else {
+            // Blocked. Try one last time to turn if we are at the end of a corridor
+            this.snapToTile();
+            if (this.nextDirection !== Direction.NONE && this.canMove(this.nextDirection, maze, currentSpeed)) {
+                this.direction = this.nextDirection;
+                this.nextDirection = Direction.NONE;
+                // Move in the new direction immediately to avoid 1-frame pause
+                if (this.canMove(this.direction, maze, currentSpeed)) {
+                    this.move(this.direction, currentSpeed);
+                    this.animationFrame++;
+                    this.draw();
+                }
+            } else {
+                this.animationFrame = 0;
                 this.draw();
             }
-        } else {
-            // Stop and snap to tile center if we hit a wall
-            this.snapToTile();
-            // Reset to full circle when stopped
-            this.animationFrame = 0;
-            this.draw();
         }
 
-        // 3. Handle Tunnel Wrapping
+        // 4. Handle Tunnel Wrapping
         if (this.x < -TILE_SIZE / 2) {
             this.x = MAZE_WIDTH + TILE_SIZE / 2;
         } else if (this.x > MAZE_WIDTH + TILE_SIZE / 2) {
@@ -152,6 +157,29 @@ export class PacMan {
         }
         
         this.updateVisualPosition();
+    }
+
+    private move(dir: Direction, speed: number) {
+        if (dir === Direction.LEFT) this.x -= speed;
+        else if (dir === Direction.RIGHT) this.x += speed;
+        else if (dir === Direction.UP) this.y -= speed;
+        else if (dir === Direction.DOWN) this.y += speed;
+    }
+
+    private isNearCenter(tolerance: number): boolean {
+        const offX = this.x % TILE_SIZE;
+        const offY = this.y % TILE_SIZE;
+        const distX = Math.min(offX, TILE_SIZE - offX);
+        const distY = Math.min(offY, TILE_SIZE - offY);
+        return distX < tolerance && distY < tolerance;
+    }
+
+    private isOpposite(dir1: Direction, dir2: Direction): boolean {
+        if (dir1 === Direction.UP && dir2 === Direction.DOWN) return true;
+        if (dir1 === Direction.DOWN && dir2 === Direction.UP) return true;
+        if (dir1 === Direction.LEFT && dir2 === Direction.RIGHT) return true;
+        if (dir1 === Direction.RIGHT && dir2 === Direction.LEFT) return true;
+        return false;
     }
 
     private canMove(dir: Direction, maze: MazeTile[][], speed: number): boolean {
@@ -199,13 +227,6 @@ export class PacMan {
         }
 
         return true;
-    }
-
-    private isAlignedWithTile(speed: number): boolean {
-        const tolerance = speed;
-        const offX = Math.abs(this.x % TILE_SIZE);
-        const offY = Math.abs(this.y % TILE_SIZE);
-        return offX < tolerance && offY < tolerance;
     }
 
     private snapToTile() {
