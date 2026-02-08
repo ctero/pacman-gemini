@@ -21,7 +21,7 @@
     - [ ] Implement: Update `ScoringEngine` and create a temporary `ScorePopup` UI component
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Interaction and Scoring' (Protocol in workflow.md)
 
-## Phase 3: Rendering and Assets
+## Phase 3: Rendering and Assets [checkpoint: 955347a]
 - [x] Task: Fruit Sprite Rendering (f1b941b)
     - [ ] Implement: Add fruit sprites to the rendering loop and position them at the spawn point
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Rendering and Assets' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Rendering and Assets' (Protocol in workflow.md)
