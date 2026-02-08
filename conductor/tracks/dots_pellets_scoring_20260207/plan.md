@@ -19,10 +19,10 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Power Pellets and Ghost Interaction' (Protocol in workflow.md)
 
 ## Phase 3: Scoring and UI
-- [ ] Task: Scoring Engine
+- [x] Task: Scoring Engine (d9fc296)
     - [ ] Write Tests: Score accumulation rules
     - [ ] Implement: Logic to track current and high scores
-- [ ] Task: Scoring UI
+- [x] Task: Scoring UI (d9fc296)
     - [ ] Write Tests: UI text initialization
     - [ ] Implement: Display current and high score using Pixi.js Text
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Scoring and UI' (Protocol in workflow.md)
