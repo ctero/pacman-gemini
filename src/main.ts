@@ -32,6 +32,8 @@ async function init() {
     const scoringEngine = new ScoringEngine();
     const scoringUI = new ScoringUI();
     scoringUI.addTo(app.stage);
+    scoringUI.update(0, scoringEngine.getHighScore(), gameState.lives);
+    scoringUI.showReady(true);
 
     const mazeState = new MazeState(MAZE_DATA);
     const mazeRenderer = new MazeRenderer();
@@ -66,11 +68,14 @@ async function init() {
             g.direction = Direction.NONE;
             g.setHouseTimer(60); // 1 second wait
         });
+
+        scoringUI.showReady(true);
     };
 
     const startGame = () => {
         if (gameStarted) return;
         gameStarted = true;
+        scoringUI.showReady(false);
         audioManager.play('intro');
         resetPositions();
         // Delay actual movement until intro finishes? 
@@ -116,7 +121,7 @@ async function init() {
                 }
             }
             scoringEngine.updateHighScore();
-            scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore());
+            scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore(), gameState.lives);
         }
 
         // Handle FRIGHTENED mode ending
@@ -160,7 +165,7 @@ async function init() {
                     audioManager.play('eat_ghost');
                     scoringEngine.addGhost();
                     scoringEngine.updateHighScore();
-                    scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore());
+                    scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore(), gameState.lives);
                     
                     const startPositions = [
                         { x: 13.5 * TILE_SIZE, y: 14 * TILE_SIZE },

@@ -1,10 +1,10 @@
 # Track Implementation Plan: lifecycle_progression_20260207
 
 ## Phase 1: Life Management
-- [ ] Task: Life Counter and Display
+- [x] Task: Life Counter and Display (51d6984)
     - [ ] Write Tests: Life decrement and Game Over trigger
     - [ ] Implement: Display Pac-Man icons at the bottom of the screen
-- [ ] Task: Ready/GameOver UI
+- [x] Task: Ready/GameOver UI (51d6984)
     - [ ] Implement: Text overlays for "Ready!" and "Game Over"
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Life Management' (Protocol in workflow.md)
 
