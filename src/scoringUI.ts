@@ -76,6 +76,25 @@ export class ScoringUI {
         this.gameOverText.visible = visible;
     }
 
+    public showScorePopup(x: number, y: number, score: number) {
+        const style = new TextStyle({
+            fontFamily: 'monospace',
+            fontSize: 7,
+            fill: 0x00ffff,
+        });
+        const popup = new Text({ text: score.toString(), style });
+        popup.position.set(x, y);
+        popup.anchor.set(0.5, 0.5);
+        this.scoreContainer.addChild(popup);
+
+        setTimeout(() => {
+            if (popup.parent) {
+                popup.parent.removeChild(popup);
+                popup.destroy();
+            }
+        }, 2000);
+    }
+
     public update(score: number, highScore: number, lives: number) {
         this.scoreText.text = score.toString().padStart(2, '0');
         this.highScoreText.text = highScore.toString().padStart(2, '0');

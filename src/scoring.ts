@@ -22,6 +22,10 @@ export class ScoringEngine {
         this.dotsEaten = 0;
     }
 
+    public addFruit(points: number) {
+        this.score += points;
+    }
+
     public addGhost() {
         this.score += 200 * this.ghostMultiplier;
         this.ghostMultiplier *= 2;

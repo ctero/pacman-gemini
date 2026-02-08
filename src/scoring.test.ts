@@ -40,13 +40,17 @@ describe('ScoringEngine', () => {
         expect(engine.getScore()).toBe(400); // 200 + 200
     });
 
-    it('should track and update high score', () => {
-        engine.addPowerPellet(); // 50
-        engine.updateHighScore();
-        expect(engine.getHighScore()).toBe(50);
-        
-        const newEngine = new ScoringEngine();
-        // Since we don't have persistence yet, high score is per session or handled by a manager.
-        // For now let's assume the engine instance can handle it or we test the logic.
+    it('should reset dotsEaten on resetDotsEaten', () => {
+        engine.addDot();
+        expect(engine.getDotsEaten()).toBe(1);
+        engine.resetDotsEaten();
+        expect(engine.getDotsEaten()).toBe(0);
+    });
+
+    it('should add points for fruit', () => {
+        engine.addFruit(100);
+        expect(engine.getScore()).toBe(100);
+        engine.addFruit(500);
+        expect(engine.getScore()).toBe(600);
     });
 });

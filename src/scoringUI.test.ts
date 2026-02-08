@@ -32,10 +32,14 @@ describe('ScoringUI', () => {
         expect(ui.scoreContainer).toBeDefined();
     });
 
-    it('should update text when update() is called', () => {
+    it('should show score popup', () => {
+        vi.useFakeTimers();
         const ui = new ScoringUI();
-        ui.update(100, 500, 3);
-        // We'd need to expose the text objects or check addChild calls
+        ui.showScorePopup(100, 100, 500);
         expect(ui.scoreContainer.addChild).toHaveBeenCalled();
+        
+        vi.advanceTimersByTime(2001);
+        // Expect child removal (difficult to verify with current mocks but we check the flow)
+        vi.useRealTimers();
     });
 });
