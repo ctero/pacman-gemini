@@ -7,14 +7,14 @@
     - [ ] Set up basic Pixi Application in `main.ts`
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Project Scaffolding' (Protocol in workflow.md)
 
-## Phase 2: Maze Implementation
+## Phase 2: Maze Implementation [checkpoint: 28dfbba]
 - [x] Task: Tile Map Definition (2ade1f0)
     - [ ] Write Tests: Tile map data structure integrity
     - [ ] Implement: Define the 2D array representation of the classic maze
 - [x] Task: Maze Rendering (28b893b)
     - [ ] Write Tests: Layer management (walls layer, dots layer)
     - [ ] Implement: Render walls, dots, and power pellets using Pixi.js Graphics or Sprites
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Maze Implementation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Maze Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Pac-Man Core
 - [ ] Task: Pac-Man Movement Engine
