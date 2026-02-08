@@ -7,7 +7,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Foundation & Data Tables' (Protocol in workflow.md)
 
 ## Phase 2: Pac-Man Movement & Speed
-- [ ] Task: Pac-Man Speed Logic & Eating Penalty
+- [x] Task: Pac-Man Speed Logic & Eating Penalty (cc4b287)
     - [ ] Write Tests: Speed calculation including level base speed and eating penalty
     - [ ] Implement: Update `PacMan` class to handle variable speed and consumption penalty
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Pac-Man Movement & Speed' (Protocol in workflow.md)
