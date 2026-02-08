@@ -13,7 +13,7 @@
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Pac-Man Movement & Speed' (Protocol in workflow.md)
 
 ## Phase 3: Ghost AI & Behavior
-- [ ] Task: Cruise Elroy Logic
+- [x] Task: Cruise Elroy Logic (d70e11e)
     - [ ] Write Tests: Blinky's speed increase based on dots remaining
     - [ ] Implement: Update `Ghost` class for Cruise Elroy state
 - [ ] Task: Ghost House Exit dot counters
