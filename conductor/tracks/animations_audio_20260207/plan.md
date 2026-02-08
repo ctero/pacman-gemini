@@ -12,7 +12,7 @@
     - [ ] Implement: Blue/White flashing for frightened ghosts
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Visual Upgrades' (Protocol in workflow.md)
 
-## Phase 2: Audio Integration
+## Phase 2: Audio Integration [checkpoint: c254ff6]
 - [x] Task: Audio Manager (0645e7e)
     - [ ] Write Tests: Sound loading and state tracking
     - [ ] Implement: global `AudioManager` with Howler.js
@@ -22,4 +22,4 @@
 - [x] Task: Event-Driven Sounds (d4781cf)
     - [ ] Implement: Ghost eaten and death sounds
     - [ ] Implement: Power pellet state audio changes
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Audio Integration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Audio Integration' (Protocol in workflow.md)
