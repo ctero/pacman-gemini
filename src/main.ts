@@ -103,6 +103,13 @@ async function init() {
     window.addEventListener('keydown', () => {
         if (!gameStarted || gameState.status === GameStatus.READY) {
             startGame();
+        } else if (gameState.status === GameStatus.GAME_OVER) {
+            // Full reset for new game
+            gameState.lives = 3;
+            scoringEngine.resetGhostMultiplier();
+            // score reset? usually yes for new game
+            // we'd need a full reset function
+            window.location.reload(); 
         }
     });
 

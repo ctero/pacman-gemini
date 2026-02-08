@@ -18,8 +18,8 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Level Progression' (Protocol in workflow.md)
 
 ## Phase 3: Game Loop Integration
-- [ ] Task: Global Lifecycle State Machine
+- [x] Task: Global Lifecycle State Machine (1f3aeef)
     - [ ] Implement: Transitions between Ready, Playing, LevelComplete, and GameOver
-- [ ] Task: Audio State Sync
+- [x] Task: Audio State Sync (1f3aeef)
     - [ ] Implement: Stop/Start music and sirens based on game state
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Game Loop Integration' (Protocol in workflow.md)
