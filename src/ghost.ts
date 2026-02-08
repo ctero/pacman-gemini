@@ -15,6 +15,8 @@ export class Ghost {
     private cruiseElroySpeed: number | null = null;
     private houseTimer: number = 0;
     private inHouse: boolean = true;
+    private exiting: boolean = false;
+    private exitStep: number = 0;
     private frightened: boolean = false;
     private flashing: boolean = false;
     private animationFrame: number = 0;
@@ -45,6 +47,8 @@ export class Ghost {
     }
 
     public getSpeed(): number {
+        if (this.exiting) return 0.4 * (80 / 60); // Slow exit speed
+
         const tileX = Math.round(this.x / TILE_SIZE);
         const tileY = Math.round(this.y / TILE_SIZE);
 
@@ -165,6 +169,8 @@ export class Ghost {
         this.y = y;
         this.direction = Direction.NONE;
         this.frightened = false;
+        this.exiting = false;
+        this.exitStep = 0;
         this.setHouseTimer(60);
         this.draw();
         this.updateVisualPosition();
@@ -176,12 +182,41 @@ export class Ghost {
 
     public forceExitHouse() {
         if (this.inHouse) {
-            this.houseTimer = 0;
+            this.exiting = true;
             this.inHouse = false;
-            // Snap to grid on exit
-            this.x = Math.round(this.x / TILE_SIZE) * TILE_SIZE;
-            this.y = Math.round(this.y / TILE_SIZE) * TILE_SIZE;
+            this.exitStep = 0;
         }
+    }
+
+    private handleExit() {
+        const targetX = 13.5 * TILE_SIZE;
+        const targetY = 14 * TILE_SIZE;
+        const speed = this.getSpeed();
+
+        if (this.exitStep === 0) {
+            // Move horizontally to center
+            if (Math.abs(this.x - targetX) < speed) {
+                this.x = targetX;
+                this.exitStep = 1;
+            } else {
+                this.x += this.x < targetX ? speed : -speed;
+                this.direction = this.x < targetX ? Direction.RIGHT : Direction.LEFT;
+            }
+        } else if (this.exitStep === 1) {
+            // Move vertically to exit
+            if (Math.abs(this.y - targetY) < speed) {
+                this.y = targetY;
+                this.exiting = false;
+                this.direction = Direction.LEFT; // Standard first move
+            } else {
+                this.y += this.y < targetY ? speed : -speed;
+                this.direction = this.y < targetY ? Direction.DOWN : Direction.UP;
+            }
+        }
+        
+        this.animationFrame++;
+        this.draw();
+        this.updateVisualPosition();
     }
 
     public update(maze: MazeTile[][]) {
@@ -189,8 +224,11 @@ export class Ghost {
             // Simple up/down bounce while in house
             this.animationFrame++;
             this.draw();
-            // Just move y slightly for visual effect? 
-            // Or just stay still until forced exit.
+            return;
+        }
+
+        if (this.exiting) {
+            this.handleExit();
             return;
         }
 
@@ -246,6 +284,12 @@ export class Ghost {
     private canMove(dir: Direction, maze: MazeTile[][]): boolean {
         const tileX = Math.round(this.x / TILE_SIZE);
         const tileY = Math.round(this.y / TILE_SIZE);
+
+        // Prevent vertical movement in warp tunnels
+        if ((tileX < 0 || tileX >= 28) && (dir === Direction.UP || dir === Direction.DOWN)) {
+            return false;
+        }
+
         let nextX = tileX;
         let nextY = tileY;
 

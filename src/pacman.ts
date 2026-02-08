@@ -156,6 +156,12 @@ export class PacMan {
     private canMove(dir: Direction, maze: MazeTile[][], speed: number): boolean {
         if (dir === Direction.NONE) return false;
 
+        // Prevent vertical movement in warp tunnels
+        const currentTileX = Math.round(this.x / TILE_SIZE);
+        if ((currentTileX < 0 || currentTileX >= 28) && (dir === Direction.UP || dir === Direction.DOWN)) {
+            return false;
+        }
+
         // Calculate next tile based on direction
         let nextX = this.x;
         let nextY = this.y;
