@@ -40,4 +40,18 @@ describe('PacMan Collision and Environment', () => {
         pacman.setNextDirection(Direction.UP);
         expect(pacman.nextDirection).toBe(Direction.UP);
     });
+
+    it('should have the correct rotation for each direction', () => {
+        pacman.setDirection(Direction.RIGHT);
+        expect(pacman.getRotation()).toBe(0);
+
+        pacman.setDirection(Direction.DOWN);
+        expect(pacman.getRotation()).toBe(Math.PI / 2);
+
+        pacman.setDirection(Direction.LEFT);
+        expect(pacman.getRotation()).toBe(Math.PI);
+
+        pacman.setDirection(Direction.UP);
+        expect(pacman.getRotation()).toBe(-Math.PI / 2);
+    });
 });

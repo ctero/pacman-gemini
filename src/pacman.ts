@@ -10,6 +10,7 @@ export class PacMan {
     public direction: Direction = Direction.NONE;
     public nextDirection: Direction = Direction.NONE;
     public speed: number = 2.0;
+    private animationFrame: number = 0;
     
     public container: Container;
     private graphics: Graphics;
@@ -21,12 +22,33 @@ export class PacMan {
         this.graphics = new Graphics();
         this.draw();
         this.container.addChild(this.graphics);
+        // Center the graphics within the container for rotation
+        this.graphics.pivot.set(4, 4);
+        this.graphics.position.set(4, 4);
         this.updateVisualPosition();
+    }
+
+    public getRotation(): number {
+        if (this.direction === Direction.RIGHT) return 0;
+        if (this.direction === Direction.DOWN) return Math.PI / 2;
+        if (this.direction === Direction.LEFT) return Math.PI;
+        if (this.direction === Direction.UP) return -Math.PI / 2;
+        return 0;
     }
 
     private draw() {
         this.graphics.clear();
-        this.graphics.circle(4, 4, 4);
+        
+        // 3-frame animation logic
+        // 0: Full circle, 1: Half open, 2: Fully open
+        const frame = Math.floor(this.animationFrame / 5) % 4;
+        const mouthSize = frame === 0 ? 0 : (frame === 1 || frame === 3 ? 0.4 : 0.8);
+
+        this.graphics.beginPath();
+        this.graphics.moveTo(4, 4);
+        // Draw an arc with a "mouth" gap
+        this.graphics.arc(4, 4, 4, mouthSize, 2 * Math.PI - mouthSize);
+        this.graphics.lineTo(4, 4);
         this.graphics.fill(0xffff00);
     }
 
@@ -78,9 +100,18 @@ export class PacMan {
             } else if (this.direction === Direction.DOWN) {
                 this.y += this.speed;
             }
+            
+            // Only animate if moving
+            if (this.direction !== Direction.NONE) {
+                this.animationFrame++;
+                this.draw();
+            }
         } else {
             // Stop and snap to tile center if we hit a wall
             this.snapToTile();
+            // Reset to full circle when stopped
+            this.animationFrame = 0;
+            this.draw();
         }
 
         // 3. Handle Tunnel Wrapping
@@ -133,8 +164,8 @@ export class PacMan {
 
     private isAlignedWithTile(): boolean {
         const tolerance = this.speed;
-        const offX = this.x % TILE_SIZE;
-        const offY = this.y % TILE_SIZE;
+        const offX = Math.abs(this.x % TILE_SIZE);
+        const offY = Math.abs(this.y % TILE_SIZE);
         return offX < tolerance && offY < tolerance;
     }
 
@@ -146,5 +177,6 @@ export class PacMan {
     private updateVisualPosition() {
         this.container.x = this.x;
         this.container.y = this.y;
+        this.graphics.rotation = this.getRotation();
     }
 }
