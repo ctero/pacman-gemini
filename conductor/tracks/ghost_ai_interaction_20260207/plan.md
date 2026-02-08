@@ -19,7 +19,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Targeting and Movement' (Protocol in workflow.md)
 
 ## Phase 3: Global State and Modes
-- [ ] Task: Scatter/Chase Timer
+- [x] Task: Scatter/Chase Timer (f9e80de)
     - [ ] Write Tests: Mode transition timing
     - [ ] Implement: Global level timer to switch ghosts between Scatter and Chase
 - [ ] Task: Frightened State
