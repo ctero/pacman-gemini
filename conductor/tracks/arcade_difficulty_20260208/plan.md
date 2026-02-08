@@ -25,8 +25,8 @@
     - [ ] Implement: Proper "Exit Path" for ghosts leaving the house (move to center, then move up through door)
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Ghost AI & Behavior' (Protocol in workflow.md)
 
-## Phase 4: Global Timing & Level Progression
+## Phase 4: Global Timing & Level Progression [checkpoint: 26d52af]
 - [x] Task: Level-Based Timing Integration (1224d09)
     - [ ] Write Tests: Frightened mode and Scatter/Chase transitions per level
     - [ ] Implement: Update `GameState` to use accurate arcade timing tables
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Global Timing & Level Progression' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Global Timing & Level Progression' (Protocol in workflow.md)
