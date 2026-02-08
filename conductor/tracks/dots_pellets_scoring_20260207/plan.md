@@ -10,7 +10,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Consumption Mechanics' (Protocol in workflow.md)
 
 ## Phase 2: Power Pellets and Ghost Interaction
-- [ ] Task: Trigger Frightened Mode
+- [x] Task: Trigger Frightened Mode (ed15e1e)
     - [ ] Write Tests: Global mode switch on pellet consumption
     - [ ] Implement: Logic to set all ghosts to FRIGHTENED mode
 - [ ] Task: Eating Ghosts
