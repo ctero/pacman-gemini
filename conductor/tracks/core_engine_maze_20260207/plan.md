@@ -16,7 +16,7 @@
     - [ ] Implement: Render walls, dots, and power pellets using Pixi.js Graphics or Sprites
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Maze Implementation' (Protocol in workflow.md)
 
-## Phase 3: Pac-Man Core
+## Phase 3: Pac-Man Core [checkpoint: 7109432]
 - [x] Task: Pac-Man Movement Engine (47dbb9e)
     - [ ] Write Tests: Directional movement, velocity, and tile alignment
     - [ ] Implement: Smooth, tile-based movement logic for Pac-Man
@@ -27,4 +27,4 @@
     - [ ] Implement: Pre-turning logic at intersections
     - [ ] Write Tests: Tunnel wrapping logic
     - [ ] Implement: Screen wrapping at tunnel exits
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Pac-Man Core' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Pac-Man Core' (Protocol in workflow.md)
