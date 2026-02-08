@@ -22,4 +22,13 @@ describe('GameState Mode Timer', () => {
         state.update((7 + 20) * 60 + 1);
         expect(state.ghostMode).toBe(GhostMode.SCATTER);
     });
+
+    it('should enter FRIGHTENED mode and switch back after duration', () => {
+        state.startFrightenedMode();
+        expect(state.ghostMode).toBe(GhostMode.FRIGHTENED);
+        
+        // Frightened duration is approx 6s at Level 1
+        state.update(6 * 60 + 1);
+        expect(state.ghostMode).not.toBe(GhostMode.FRIGHTENED);
+    });
 });

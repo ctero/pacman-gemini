@@ -10,6 +10,8 @@ export class GameState {
     public level: number = 1;
     private timer: number = 0;
     private phaseIndex: number = 0;
+    private frightenedTimer: number = 0;
+    private previousMode: GhostMode = GhostMode.SCATTER;
 
     // Arcade Level 1 Timings: 
     // Scatter 7s, Chase 20s, Scatter 7s, Chase 20s, Scatter 5s, Chase 20s, Scatter 5s, Chase...
@@ -24,8 +26,20 @@ export class GameState {
         { mode: GhostMode.CHASE, duration: Infinity }
     ];
 
+    public startFrightenedMode() {
+        if (this.ghostMode !== GhostMode.FRIGHTENED) {
+            this.previousMode = this.ghostMode;
+        }
+        this.ghostMode = GhostMode.FRIGHTENED;
+        this.frightenedTimer = 6 * 60; // 6 seconds at 60fps
+    }
+
     public update(frames: number) {
         if (this.ghostMode === GhostMode.FRIGHTENED) {
+            this.frightenedTimer -= frames;
+            if (this.frightenedTimer <= 0) {
+                this.ghostMode = this.previousMode;
+            }
             return;
         }
 

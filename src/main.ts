@@ -74,7 +74,20 @@ async function init() {
         const eaten = pacman.eat(mazeState);
         if (eaten !== MazeTile.EMPTY) {
             mazeRenderer.renderItems(mazeState.getData());
+            if (eaten === MazeTile.POWER_PELLET) {
+                gameState.startFrightenedMode();
+                ghosts.forEach(g => g.setFrightened(true));
+            }
             // TODO: Score update
+        }
+
+        // Handle FRIGHTENED mode ending
+        if (gameState.ghostMode !== GhostMode.FRIGHTENED) {
+            ghosts.forEach(g => {
+                if (g.isFrightened()) {
+                    g.setFrightened(false);
+                }
+            });
         }
 
         // Update Ghost AI Targets
