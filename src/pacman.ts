@@ -69,6 +69,10 @@ export class PacMan {
         this.direction = direction;
     }
 
+    public setVisible(visible: boolean) {
+        this.container.visible = visible;
+    }
+
     public setNextDirection(direction: Direction) {
         this.nextDirection = direction;
     }

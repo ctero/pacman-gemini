@@ -1,5 +1,5 @@
 import { Container, Graphics } from 'pixi.js';
-import { Direction, Point } from './types';
+import { Direction, Point, GhostState } from './types';
 import { chooseNextDirection } from './ghostMovement';
 import { MazeTile } from './mazeData';
 import { TILE_SIZE } from './constants';
@@ -9,14 +9,17 @@ export class Ghost {
     public y: number;
     public direction: Direction = Direction.NONE;
     public target: Point = { x: 0, y: 0 };
+    private state: GhostState = GhostState.NORMAL;
     private baseSpeed: number = 0.75 * (80 / 60);
     private frightenedSpeed: number = 0.5 * (80 / 60);
     private tunnelSpeed: number = 0.4 * (80 / 60);
+    private eatenSpeed: number = 2.0 * (80 / 60);
     private cruiseElroySpeed: number | null = null;
     private houseTimer: number = 0;
     private inHouse: boolean = true;
     private exiting: boolean = false;
     private exitStep: number = 0;
+    private regenerationTimer: number = 0;
     private frightened: boolean = false;
     private flashing: boolean = false;
     private animationFrame: number = 0;
@@ -24,11 +27,16 @@ export class Ghost {
     public container: Container;
     private graphics: Graphics;
     private color: number;
+    private homePosition: Point;
 
     constructor(x: number, y: number, color: number) {
         this.x = x;
         this.y = y;
         this.color = color;
+        this.homePosition = { x, y };
+        // 17 * TILE_SIZE is inside the house
+        this.inHouse = (Math.round(y / TILE_SIZE) === 17);
+        this.state = this.inHouse ? GhostState.NORMAL : GhostState.NORMAL; // Still NORMAL, but inHouse flag is used for logic
         this.container = new Container();
         this.graphics = new Graphics();
         this.draw();
@@ -36,10 +44,21 @@ export class Ghost {
         this.updateVisualPosition();
     }
 
+    public getState(): GhostState {
+        return this.state;
+    }
+
+    public setEaten() {
+        this.state = GhostState.EATEN;
+        this.frightened = false;
+        this.draw();
+    }
+
     public setSpeeds(speeds: { base: number, frightened: number, tunnel: number }) {
         this.baseSpeed = speeds.base;
         this.frightenedSpeed = speeds.frightened;
         this.tunnelSpeed = speeds.tunnel;
+        this.eatenSpeed = speeds.base * 2; // Typically double base speed
     }
 
     public setCruiseElroySpeed(speed: number | null) {
@@ -47,6 +66,10 @@ export class Ghost {
     }
 
     public getSpeed(): number {
+        if (this.state === GhostState.EATEN || this.state === GhostState.ENTERING_HOUSE) {
+            return this.eatenSpeed;
+        }
+
         if (this.exiting) return 0.4 * (80 / 60); // Slow exit speed
 
         const tileX = Math.round(this.x / TILE_SIZE);
@@ -76,43 +99,50 @@ export class Ghost {
     private draw() {
         this.graphics.clear();
         
-        let bodyColor = this.frightened ? 0x2121ff : this.color;
-        let eyeColor = this.frightened ? 0xffb8ff : 0xffffff;
-        let pupilColor = this.frightened ? 0xffb8ff : 0x0000ff;
+        const isEyesOnly = this.state === GhostState.EATEN || this.state === GhostState.ENTERING_HOUSE;
 
-        // Flashing logic (last 2s): switch between blue and white every 10 frames
-        if (this.flashing) {
-            const flashFrame = Math.floor(this.animationFrame / 10) % 2;
-            if (flashFrame === 1) {
-                bodyColor = 0xffffff;
-                eyeColor = 0xff0000;
-                pupilColor = 0xff0000;
+        if (!isEyesOnly) {
+            let bodyColor = this.frightened ? 0x2121ff : this.color;
+            let eyeColor = this.frightened ? 0xffb8ff : 0xffffff;
+            let pupilColor = this.frightened ? 0xffb8ff : 0x0000ff;
+
+            // Flashing logic (last 2s): switch between blue and white every 10 frames
+            if (this.flashing) {
+                const flashFrame = Math.floor(this.animationFrame / 10) % 2;
+                if (flashFrame === 1) {
+                    bodyColor = 0xffffff;
+                    eyeColor = 0xff0000;
+                    pupilColor = 0xff0000;
+                }
             }
+
+            // Simple ghost shape (square with a rounded top)
+            this.graphics.rect(0, 4, 8, 4);
+            this.graphics.circle(4, 4, 4);
+            this.graphics.fill(bodyColor);
+            
+            // Legs animation (2 frames)
+            const legFrame = Math.floor(this.animationFrame / 10) % 2;
+            if (legFrame === 0) {
+                this.graphics.moveTo(0, 8);
+                this.graphics.lineTo(2, 6);
+                this.graphics.lineTo(4, 8);
+                this.graphics.lineTo(6, 6);
+                this.graphics.lineTo(8, 8);
+            } else {
+                this.graphics.moveTo(0, 6);
+                this.graphics.lineTo(2, 8);
+                this.graphics.lineTo(4, 6);
+                this.graphics.lineTo(6, 8);
+                this.graphics.lineTo(8, 6);
+            }
+            this.graphics.fill(bodyColor);
         }
 
-        // Simple ghost shape (square with a rounded top)
-        this.graphics.rect(0, 4, 8, 4);
-        this.graphics.circle(4, 4, 4);
-        this.graphics.fill(bodyColor);
-        
-        // Legs animation (2 frames)
-        const legFrame = Math.floor(this.animationFrame / 10) % 2;
-        if (legFrame === 0) {
-            this.graphics.moveTo(0, 8);
-            this.graphics.lineTo(2, 6);
-            this.graphics.lineTo(4, 8);
-            this.graphics.lineTo(6, 6);
-            this.graphics.lineTo(8, 8);
-        } else {
-            this.graphics.moveTo(0, 6);
-            this.graphics.lineTo(2, 8);
-            this.graphics.lineTo(4, 6);
-            this.graphics.lineTo(6, 8);
-            this.graphics.lineTo(8, 6);
-        }
-        this.graphics.fill(bodyColor);
+        let eyeColor = this.frightened && !isEyesOnly ? 0xffb8ff : 0xffffff;
+        let pupilColor = this.frightened && !isEyesOnly ? 0xffb8ff : 0x0000ff;
 
-        if (this.frightened) {
+        if (this.frightened && !isEyesOnly) {
             // Squiggly mouth for frightened
             this.graphics.rect(1, 6, 6, 1);
             this.graphics.fill(eyeColor);
@@ -160,7 +190,10 @@ export class Ghost {
     }
 
     public setFrightened(frightened: boolean) {
+        if (this.state === GhostState.EATEN || this.state === GhostState.ENTERING_HOUSE) return;
+        
         this.frightened = frightened;
+        this.state = frightened ? GhostState.FRIGHTENED : GhostState.NORMAL;
         this.draw();
     }
 
@@ -169,6 +202,7 @@ export class Ghost {
         this.y = y;
         this.direction = Direction.NONE;
         this.frightened = false;
+        this.state = GhostState.NORMAL;
         this.exiting = false;
         this.exitStep = 0;
         this.setHouseTimer(60);
@@ -178,6 +212,10 @@ export class Ghost {
 
     public isFrightened(): boolean {
         return this.frightened;
+    }
+
+    public setVisible(visible: boolean) {
+        this.container.visible = visible;
     }
 
     public forceExitHouse() {
@@ -219,7 +257,57 @@ export class Ghost {
         this.updateVisualPosition();
     }
 
+    private handleEntering() {
+        const centerTileX = 13.5 * TILE_SIZE;
+        const speed = this.getSpeed();
+
+        if (this.state === GhostState.ENTERING_HOUSE) {
+            // First move horizontally to 13.5 (center) if not already there
+            if (Math.abs(this.x - centerTileX) > 0.1) {
+                this.x += this.x < centerTileX ? speed : -speed;
+                if (Math.abs(this.x - centerTileX) < speed) this.x = centerTileX;
+                this.direction = this.x < centerTileX ? Direction.RIGHT : Direction.LEFT;
+            } else if (Math.abs(this.y - this.homePosition.y) > 0.1) {
+                // Then move down to home Y
+                this.y += this.y < this.homePosition.y ? speed : -speed;
+                if (Math.abs(this.y - this.homePosition.y) < speed) this.y = this.homePosition.y;
+                this.direction = this.y < this.homePosition.y ? Direction.DOWN : Direction.UP;
+            } else if (Math.abs(this.x - this.homePosition.x) > 0.1) {
+                // Finally move to home X
+                this.x += this.x < this.homePosition.x ? speed : -speed;
+                if (Math.abs(this.x - this.homePosition.x) < speed) this.x = this.homePosition.x;
+                this.direction = this.x < this.homePosition.x ? Direction.RIGHT : Direction.LEFT;
+            } else {
+                // Reached home
+                this.state = GhostState.REGENERATING;
+                this.inHouse = true;
+                this.regenerationTimer = 30; // 0.5s at 60fps
+                this.draw();
+            }
+        }
+        
+        this.animationFrame++;
+        this.draw();
+        this.updateVisualPosition();
+    }
+
     public update(maze: MazeTile[][]) {
+        if (this.state === GhostState.REGENERATING) {
+            this.regenerationTimer--;
+            if (this.regenerationTimer <= 0) {
+                this.state = GhostState.NORMAL;
+                this.draw();
+            }
+            this.animationFrame++;
+            this.draw();
+            return;
+        }
+
+        if (this.state === GhostState.ENTERING_HOUSE) {
+            this.handleEntering();
+            return;
+        }
+
         if (this.inHouse) {
             // Simple up/down bounce while in house
             this.animationFrame++;
@@ -237,13 +325,31 @@ export class Ghost {
         // Decision point: center of tile
         if (this.isAtTileCenter(currentSpeed)) {
             const oldDir = this.direction;
+            
+            let effectiveTarget = this.target;
+            if (this.state === GhostState.EATEN) {
+                effectiveTarget = { x: 13.5 * TILE_SIZE, y: 14 * TILE_SIZE };
+                
+                // Check if reached entrance
+                const distToEntrance = Math.sqrt(
+                    Math.pow(this.x - effectiveTarget.x, 2) + 
+                    Math.pow(this.y - effectiveTarget.y, 2)
+                );
+                if (distToEntrance < currentSpeed) {
+                    this.x = effectiveTarget.x;
+                    this.y = effectiveTarget.y;
+                    this.state = GhostState.ENTERING_HOUSE;
+                    return;
+                }
+            }
+
             if (this.frightened) {
                 this.direction = this.chooseRandomDirection(maze);
             } else {
                 this.direction = chooseNextDirection(
                     { x: this.x, y: this.y },
                     this.direction,
-                    this.target,
+                    effectiveTarget,
                     maze
                 );
             }

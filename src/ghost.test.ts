@@ -41,11 +41,12 @@ describe('Ghost Base Class', () => {
     });
 
     it('should stay in the ghost house by default', () => {
+        const houseGhost = new Ghost(13.5 * TILE_SIZE, 17 * TILE_SIZE, 0xff0000);
         const maze = Array(36).fill(null).map(() => Array(28).fill(MazeTile.EMPTY));
-        ghost.setDirection(Direction.UP);
-        ghost.update(maze);
-        expect(ghost.isInHouse()).toBe(true);
-        expect(ghost.x).toBe(14 * TILE_SIZE);
+        houseGhost.setDirection(Direction.UP);
+        houseGhost.update(maze);
+        expect(houseGhost.isInHouse()).toBe(true);
+        expect(houseGhost.x).toBe(13.5 * TILE_SIZE);
     });
 
     it('should change color when frightened', () => {

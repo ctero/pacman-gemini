@@ -13,6 +13,14 @@ export enum GhostMode {
     EATEN = 3
 }
 
+export enum GhostState {
+    NORMAL = 0,
+    FRIGHTENED = 1,
+    EATEN = 2,
+    ENTERING_HOUSE = 3,
+    REGENERATING = 4
+}
+
 export enum GameStatus {
     READY = 0,
     PLAYING = 1,
