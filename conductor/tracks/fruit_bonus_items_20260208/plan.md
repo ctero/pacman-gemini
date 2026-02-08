@@ -12,14 +12,14 @@
     - [ ] Implement: Timer-based despawning and reset logic during `loseLife`
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Data and Core Spawning' (Protocol in workflow.md)
 
-## Phase 2: Interaction and Scoring
+## Phase 2: Interaction and Scoring [checkpoint: cfb2126]
 - [x] Task: Fruit Collision Logic (3c2e77a)
     - [ ] Write Tests: Detection of Pac-Man overlapping the fruit spawn point
     - [ ] Implement: Collision detection between Pac-Man and the active fruit
 - [x] Task: Scoring and Score Popup UI (4d0137e)
     - [ ] Write Tests: Score increases by correct amount and popup appears/disappears
     - [ ] Implement: Update `ScoringEngine` and create a temporary `ScorePopup` UI component
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Interaction and Scoring' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Interaction and Scoring' (Protocol in workflow.md)
 
 ## Phase 3: Rendering and Assets
 - [ ] Task: Fruit Sprite Rendering
