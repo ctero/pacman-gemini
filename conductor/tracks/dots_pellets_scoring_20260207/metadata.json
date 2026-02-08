@@ -1,0 +1,8 @@
+{
+  "track_id": "dots_pellets_scoring_20260207",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-02-07T23:45:00Z",
+  "updated_at": "2026-02-07T23:45:00Z",
+  "description": "Dots, Pellets, and Scoring: Implement the interaction for Pac-Man to eat dots/pellets, trigger frightened mode, and track scores."
+}
