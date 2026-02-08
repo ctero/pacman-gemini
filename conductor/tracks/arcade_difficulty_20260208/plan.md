@@ -12,7 +12,7 @@
     - [ ] Implement: Update `PacMan` class to handle variable speed and consumption penalty
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Pac-Man Movement & Speed' (Protocol in workflow.md)
 
-## Phase 3: Ghost AI & Behavior
+## Phase 3: Ghost AI & Behavior [checkpoint: 6a090b6]
 - [x] Task: Cruise Elroy Logic (d70e11e)
     - [ ] Write Tests: Blinky's speed increase based on dots remaining
     - [ ] Implement: Update `Ghost` class for Cruise Elroy state
@@ -23,7 +23,7 @@
     - [ ] Write Tests: Prevent vertical movement in warp tunnels
     - [ ] Implement: Clamp y position during warp and restrict direction changes
     - [ ] Implement: Proper "Exit Path" for ghosts leaving the house (move to center, then move up through door)
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Ghost AI & Behavior' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Ghost AI & Behavior' (Protocol in workflow.md)
 
 ## Phase 4: Global Timing & Level Progression
 - [ ] Task: Level-Based Timing Integration
