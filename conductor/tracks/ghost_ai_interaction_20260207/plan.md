@@ -31,7 +31,7 @@
 - [x] Task: Pac-Man/Ghost Collision (3d82c0d)
     - [ ] Write Tests: Collision detection and life loss
     - [ ] Implement: Logic to check for overlaps and trigger death animation/reset
-- [ ] Task: Level Reset
+- [x] Task: Level Reset (3800080)
     - [ ] Write Tests: Resetting positions after death
     - [ ] Implement: Functionality to return Pac-Man and ghosts to starting positions
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Interactions and Lifecycle' (Protocol in workflow.md)
