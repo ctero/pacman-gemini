@@ -17,7 +17,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Maze Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Pac-Man Core
-- [ ] Task: Pac-Man Movement Engine
+- [x] Task: Pac-Man Movement Engine (47dbb9e)
     - [ ] Write Tests: Directional movement, velocity, and tile alignment
     - [ ] Implement: Smooth, tile-based movement logic for Pac-Man
 - [ ] Task: Collision and Environment
