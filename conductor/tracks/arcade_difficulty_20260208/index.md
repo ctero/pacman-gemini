@@ -1,4 +1,4 @@
-# Track fruit_bonus_items_20260208 Context
+# Track arcade_difficulty_20260208 Context
 
 - [Specification](./spec.md)
 - [Implementation Plan](./plan.md)
