@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Arcade-Accurate Difficulty Scaling**
+- [x] **Track: Arcade-Accurate Difficulty Scaling**
 *Link: [./tracks/arcade_difficulty_20260208/](./tracks/arcade_difficulty_20260208/)*
