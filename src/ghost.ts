@@ -12,6 +12,7 @@ export class Ghost {
     public speed: number = 1.8; // Slightly slower than Pac-Man (2.0)
     private houseTimer: number = 0;
     private inHouse: boolean = true;
+    private frightened: boolean = false;
     
     public container: Container;
     private graphics: Graphics;
@@ -30,20 +31,31 @@ export class Ghost {
 
     private draw() {
         this.graphics.clear();
+        
+        const bodyColor = this.frightened ? 0x2121ff : this.color;
+        const eyeColor = this.frightened ? 0xffb8ff : 0xffffff;
+        const pupilColor = this.frightened ? 0xffb8ff : 0x0000ff;
+
         // Simple ghost shape (square with a rounded top)
         this.graphics.rect(0, 4, 8, 4);
         this.graphics.circle(4, 4, 4);
-        this.graphics.fill(this.color);
+        this.graphics.fill(bodyColor);
         
-        // Eyes (white)
-        this.graphics.circle(2, 3, 1.5);
-        this.graphics.circle(6, 3, 1.5);
-        this.graphics.fill(0xffffff);
+        if (this.frightened) {
+            // Squiggly mouth or just different eyes for frightened
+            this.graphics.rect(1, 6, 6, 1);
+            this.graphics.fill(eyeColor);
+        } else {
+            // Eyes (white)
+            this.graphics.circle(2, 3, 1.5);
+            this.graphics.circle(6, 3, 1.5);
+            this.graphics.fill(eyeColor);
 
-        // Pupils (blue)
-        this.graphics.circle(2, 3, 0.5);
-        this.graphics.circle(6, 3, 0.5);
-        this.graphics.fill(0x0000ff);
+            // Pupils (blue)
+            this.graphics.circle(2, 3, 0.5);
+            this.graphics.circle(6, 3, 0.5);
+            this.graphics.fill(pupilColor);
+        }
     }
 
     public setDirection(direction: Direction) {
@@ -67,6 +79,15 @@ export class Ghost {
         return this.inHouse;
     }
 
+    public setFrightened(frightened: boolean) {
+        this.frightened = frightened;
+        this.draw();
+    }
+
+    public isFrightened(): boolean {
+        return this.frightened;
+    }
+
     public update(maze: MazeTile[][]) {
         if (this.houseTimer > 0) {
             this.houseTimer--;
@@ -80,12 +101,16 @@ export class Ghost {
 
         // Decision point: center of tile
         if (this.isAtTileCenter()) {
-            this.direction = chooseNextDirection(
-                { x: this.x, y: this.y },
-                this.direction,
-                this.target,
-                maze
-            );
+            if (this.frightened) {
+                this.direction = this.chooseRandomDirection(maze);
+            } else {
+                this.direction = chooseNextDirection(
+                    { x: this.x, y: this.y },
+                    this.direction,
+                    this.target,
+                    maze
+                );
+            }
         }
 
         if (this.direction === Direction.LEFT) {
@@ -99,6 +124,65 @@ export class Ghost {
         }
         
         this.updateVisualPosition();
+    }
+
+    private chooseRandomDirection(maze: MazeTile[][]): Direction {
+        const dirs = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT];
+        const validDirs = dirs.filter(d => d !== this.getOppositeDirection() && this.canMove(d, maze));
+        if (validDirs.length === 0) return this.getOppositeDirection();
+        return validDirs[Math.floor(Math.random() * validDirs.length)];
+    }
+
+    private getOppositeDirection(): Direction {
+        if (this.direction === Direction.UP) return Direction.DOWN;
+        if (this.direction === Direction.DOWN) return Direction.UP;
+        if (this.direction === Direction.LEFT) return Direction.RIGHT;
+        if (this.direction === Direction.RIGHT) return Direction.LEFT;
+        return Direction.NONE;
+    }
+
+    private canMove(dir: Direction, maze: MazeTile[][]): boolean {
+        const tileX = Math.round(this.x / TILE_SIZE);
+        const tileY = Math.round(this.y / TILE_SIZE);
+        let nextX = tileX;
+        let nextY = tileY;
+
+        if (dir === Direction.UP) nextY--;
+        if (dir === Direction.DOWN) nextY++;
+        if (dir === Direction.LEFT) nextX--;
+        if (dir === Direction.RIGHT) nextX++;
+
+        if (nextX < 0 || nextX >= 28 || nextY < 0 || nextY >= 36) return true;
+        return maze[nextY][nextX] !== MazeTile.WALL;
+    }
+
+    private draw() {
+        this.graphics.clear();
+        
+        const bodyColor = this.frightened ? 0x2121ff : this.color;
+        const eyeColor = this.frightened ? 0xffb8ff : 0xffffff;
+        const pupilColor = this.frightened ? 0xffb8ff : 0x0000ff;
+
+        // Simple ghost shape (square with a rounded top)
+        this.graphics.rect(0, 4, 8, 4);
+        this.graphics.circle(4, 4, 4);
+        this.graphics.fill(bodyColor);
+        
+        if (this.frightened) {
+            // Squiggly mouth or just different eyes for frightened
+            this.graphics.rect(1, 6, 6, 1);
+            this.graphics.fill(eyeColor);
+        } else {
+            // Eyes (white)
+            this.graphics.circle(2, 3, 1.5);
+            this.graphics.circle(6, 3, 1.5);
+            this.graphics.fill(eyeColor);
+
+            // Pupils (blue)
+            this.graphics.circle(2, 3, 0.5);
+            this.graphics.circle(6, 3, 0.5);
+            this.graphics.fill(pupilColor);
+        }
     }
 
     private isAtTileCenter(): boolean {

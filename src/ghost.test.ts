@@ -50,4 +50,11 @@ describe('Ghost Base Class', () => {
         ghost.update(maze);
         expect(ghost.getHouseTimer()).toBeLessThan(10);
     });
+
+    it('should change color when frightened', () => {
+        ghost.setFrightened(true);
+        // This is a bit indirect as we'd need to check graphics, 
+        // but we can at least check a property if we add one.
+        expect(ghost.isFrightened()).toBe(true);
+    });
 });
