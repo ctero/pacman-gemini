@@ -23,6 +23,8 @@ export class GameState {
     }
 
     public startFrightenedMode() {
+        if (this.levelData.frightenedDuration === 0) return;
+
         if (this.ghostMode !== GhostMode.FRIGHTENED) {
             this.previousMode = this.ghostMode;
         }

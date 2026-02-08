@@ -56,7 +56,7 @@ const ARCADE_LEVEL_TABLE: Record<number, ArcadeLevelData> = {
         pacmanSpeed: 0.90,
         pacmanEatingSpeed: 0.79,
         ghostSpeed: 0.95,
-        ghostFrightenedSpeed: 0.60, // N/A as duration is 0
+        ghostFrightenedSpeed: 0.60,
         ghostTunnelSpeed: 0.50,
         frightenedDuration: 0,
         frightenedFlashes: 0,

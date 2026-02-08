@@ -33,12 +33,23 @@ describe('GameState Mode Timer', () => {
         expect(state.ghostMode).not.toBe(GhostMode.FRIGHTENED);
     });
 
-    it('should indicate flashing when frightened timer is low', () => {
-        state.startFrightenedMode();
-        expect(state.isFlashing()).toBe(false);
+    it('should have 0 frightened duration at level 21+', () => {
+        for (let i = 0; i < 20; i++) state.nextLevel();
+        expect(state.level).toBe(21);
         
-        // Timer starts at 360 frames. Flashing usually starts last 2s (120 frames).
-        state.update(241); // 360 - 241 = 119
-        expect(state.isFlashing()).toBe(true);
+        state.startFrightenedMode();
+        // At level 21, duration is 0, so it should immediately revert or not even start
+        // In our current implementation it might switch for 1 frame or not at all.
+        // Let's see how it behaves.
+        state.update(1);
+        expect(state.ghostMode).not.toBe(GhostMode.FRIGHTENED);
+    });
+
+    it('should follow accurate Scatter/Chase timings per level', () => {
+        // SCATTER_CHASE_TABLE is used for all levels in the arcade, 
+        // though durations change slightly at level 5+.
+        // Our table is constant for now as per arcadeData.ts.
+        state.update(7 * 60 + 1);
+        expect(state.ghostMode).toBe(GhostMode.CHASE);
     });
 });

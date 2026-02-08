@@ -7,10 +7,11 @@ export class GhostHouseManager {
     
     // Personal dot limits per level
     // Index 1: Pinky, 2: Inky, 3: Clyde
-    private personalLimits: Record<number, number[]> = {
-        1: [0, 0, 30, 60],
-        2: [0, 0, 0, 50],
-        default: [0, 0, 0, 0]
+    private personalLimits: Record<string, number[]> = {
+        "1": [0, 0, 30, 60],
+        "2": [0, 0, 0, 50],
+        "5": [0, 0, 0, 0],
+        "default": [0, 0, 0, 0]
     };
 
     // Global limits (used after life loss)
@@ -53,7 +54,11 @@ export class GhostHouseManager {
             return false;
         }
 
-        const limits = this.personalLimits[this.currentLevel] || this.personalLimits.default;
+        let levelKey = this.currentLevel.toString();
+        if (this.currentLevel >= 5) levelKey = "5";
+        else if (this.currentLevel >= 2) levelKey = "2";
+        
+        const limits = this.personalLimits[levelKey] || this.personalLimits.default;
         return this.dotsEatenInLevel >= limits[ghostIndex];
     }
 }
