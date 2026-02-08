@@ -21,28 +21,33 @@ describe('Ghost Base Class', () => {
     });
 
     it('should move in the current direction', () => {
+        const maze = Array(36).fill(null).map(() => Array(28).fill(2)); // Empty path
+        ghost.x = 14 * TILE_SIZE + 2; // Offset from center
         ghost.setDirection(Direction.LEFT);
-        ghost.update();
-        expect(ghost.x).toBeLessThan(14 * TILE_SIZE);
+        ghost.update(maze);
+        expect(ghost.x).toBeLessThan(14 * TILE_SIZE + 2);
     });
 
     it('should maintain tile alignment on the secondary axis', () => {
+        const maze = Array(36).fill(null).map(() => Array(28).fill(2)); // Empty path
         ghost.setDirection(Direction.UP);
-        ghost.update();
+        ghost.update(maze);
         expect(ghost.x).toBe(14 * TILE_SIZE);
     });
 
     it('should stay in the ghost house if houseTimer is positive', () => {
+        const maze = Array(36).fill(null).map(() => Array(28).fill(2)); // Empty path
         ghost.setHouseTimer(100);
         ghost.setDirection(Direction.UP);
-        ghost.update();
+        ghost.update(maze);
         // Should not have moved significantly if logic prevents exiting
         expect(ghost.isInHouse()).toBe(true);
     });
 
     it('should count down the house timer during updates', () => {
+        const maze = Array(36).fill(null).map(() => Array(28).fill(2)); // Empty path
         ghost.setHouseTimer(10);
-        ghost.update();
+        ghost.update(maze);
         expect(ghost.getHouseTimer()).toBeLessThan(10);
     });
 });
