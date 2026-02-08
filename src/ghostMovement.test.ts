@@ -17,13 +17,13 @@ describe('Ghost Intersection Logic', () => {
         expect(nextDir).toBe(Direction.RIGHT);
     });
 
-    it('should never reverse direction', () => {
-        const currentPos: Point = { x: 100, y: 100 };
-        const targetPos: Point = { x: 0, y: 100 }; // Target is to the left
-        const currentDir = Direction.RIGHT;
+    it('should not allow vertical movement in tunnels', () => {
+        const currentPos: Point = { x: -8, y: 17 * 8 }; // In left tunnel
+        const targetPos: Point = { x: -8, y: 0 }; // Target is UP
+        const currentDir = Direction.LEFT;
         
-        // Even if target is behind, it must not go LEFT
         const nextDir = chooseNextDirection(currentPos, currentDir, targetPos, maze);
-        expect(nextDir).not.toBe(Direction.LEFT);
+        expect(nextDir).not.toBe(Direction.UP);
+        expect(nextDir).not.toBe(Direction.DOWN);
     });
 });

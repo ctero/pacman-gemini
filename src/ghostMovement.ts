@@ -42,9 +42,16 @@ function getOppositeDirection(dir: Direction): Direction {
 }
 
 function canGhostMove(pos: Point, dir: Direction, maze: MazeTile[][]): boolean {
+    const tileX = Math.round(pos.x / TILE_SIZE);
+    
+    // Prevent vertical movement in warp tunnels
+    if ((tileX < 0 || tileX >= 28) && (dir === Direction.UP || dir === Direction.DOWN)) {
+        return false;
+    }
+
     const nextTile = getNextTileCoords(pos, dir);
     
-    // Tunnels
+    // Tunnels (horizontal movement is always allowed if outside)
     if (nextTile.x < 0 || nextTile.x >= 28) return true;
     if (nextTile.y < 0 || nextTile.y >= 36) return true;
 
