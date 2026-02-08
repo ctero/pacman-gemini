@@ -11,6 +11,7 @@ import { checkCollision } from './collision';
 import { MazeState } from './mazeState';
 import { ScoringEngine } from './scoring';
 import { ScoringUI } from './scoringUI';
+import { AudioManager } from './audioManager';
 
 async function init() {
     const app = new Application();
@@ -26,6 +27,7 @@ async function init() {
     app.canvas.style.imageRendering = 'pixelated';
     document.getElementById('app')?.appendChild(app.canvas);
 
+    const audioManager = new AudioManager();
     const gameState = new GameState();
     const scoringEngine = new ScoringEngine();
     const scoringUI = new ScoringUI();
@@ -47,6 +49,8 @@ async function init() {
     const ghosts = [blinky, pinky, inky, clyde];
     app.stage.addChild(...ghosts.map(g => g.container));
 
+    let gameStarted = false;
+
     const resetPositions = () => {
         pacman.x = 13.5 * TILE_SIZE;
         pacman.y = 26 * TILE_SIZE;
@@ -64,7 +68,22 @@ async function init() {
         });
     };
 
-    resetPositions();
+    const startGame = () => {
+        if (gameStarted) return;
+        gameStarted = true;
+        audioManager.play('intro');
+        resetPositions();
+        // Delay actual movement until intro finishes? 
+        // For now just start looping siren
+        setTimeout(() => {
+            audioManager.play('siren', true);
+        }, 4000);
+    };
+
+    // User interaction required for audio
+    window.addEventListener('keydown', () => {
+        if (!gameStarted) startGame();
+    }, { once: true });
 
     window.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowUp') pacman.setNextDirection(Direction.UP);
@@ -74,6 +93,8 @@ async function init() {
     });
 
     app.ticker.add((ticker) => {
+        if (!gameStarted) return;
+
         gameState.update(ticker.deltaTime);
         pacman.update(ticker.deltaTime, mazeState.getData());
 
@@ -85,8 +106,14 @@ async function init() {
                 ghosts.forEach(g => g.setFrightened(true));
                 scoringEngine.addPowerPellet();
                 scoringEngine.resetGhostMultiplier();
+                
+                audioManager.stop('siren');
+                audioManager.play('power_siren', true);
             } else if (eaten === MazeTile.DOT) {
                 scoringEngine.addDot();
+                if (!audioManager.isPlaying('chomp')) {
+                    audioManager.play('chomp');
+                }
             }
             scoringEngine.updateHighScore();
             scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore());
@@ -94,6 +121,10 @@ async function init() {
 
         // Handle FRIGHTENED mode ending
         if (gameState.ghostMode !== GhostMode.FRIGHTENED) {
+            if (audioManager.isPlaying('power_siren')) {
+                audioManager.stop('power_siren');
+                audioManager.play('siren', true);
+            }
             ghosts.forEach(g => {
                 if (g.isFrightened()) {
                     g.setFrightened(false);
@@ -126,6 +157,7 @@ async function init() {
             if (checkCollision(pacman, ghost)) {
                 if (ghost.isFrightened()) {
                     console.log('Ghost eaten!');
+                    audioManager.play('eat_ghost');
                     scoringEngine.addGhost();
                     scoringEngine.updateHighScore();
                     scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore());
@@ -140,7 +172,14 @@ async function init() {
                     ghost.reset(pos.x, pos.y);
                 } else {
                     console.log('Pac-Man caught!');
+                    audioManager.stop('siren');
+                    audioManager.stop('power_siren');
+                    audioManager.play('death');
                     resetPositions();
+                    // Resume siren after death sound (approx 2s)
+                    setTimeout(() => {
+                        audioManager.play('siren', true);
+                    }, 2000);
                 }
             }
         });
