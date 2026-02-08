@@ -9,14 +9,14 @@
     - [ ] Implement: Logic for ghosts waiting in and leaving the house
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Ghost Foundations' (Protocol in workflow.md)
 
-## Phase 2: Targeting and Movement
+## Phase 2: Targeting and Movement [checkpoint: 0cdc659]
 - [x] Task: Pursuit Algorithms (Chase Mode) (84fd04b)
     - [ ] Write Tests: Target tile calculation for all four ghosts
     - [ ] Implement: Specific targeting logic for Blinky, Pinky, Inky, and Clyde
 - [x] Task: Intersection Decision Logic (269a1a1)
     - [ ] Write Tests: Direction selection based on distance to target
     - [ ] Implement: Logic for ghosts choosing the shortest path to their target at intersections
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Targeting and Movement' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Targeting and Movement' (Protocol in workflow.md)
 
 ## Phase 3: Global State and Modes
 - [ ] Task: Scatter/Chase Timer
