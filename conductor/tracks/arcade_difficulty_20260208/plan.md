@@ -19,6 +19,10 @@
 - [x] Task: Ghost House Exit dot counters (9194a25)
     - [ ] Write Tests: Personal and Global dot counter logic for house exit
     - [ ] Implement: Replace timer-based exit with dot counters
+- [x] Task: Bug Fixes: Tunnel and House Exit (f4c7d81)
+    - [ ] Write Tests: Prevent vertical movement in warp tunnels
+    - [ ] Implement: Clamp y position during warp and restrict direction changes
+    - [ ] Implement: Proper "Exit Path" for ghosts leaving the house (move to center, then move up through door)
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Ghost AI & Behavior' (Protocol in workflow.md)
 
 ## Phase 4: Global Timing & Level Progression

@@ -33,10 +33,11 @@ describe('Ghost Base Class', () => {
 
     it('should maintain tile alignment on the secondary axis', () => {
         const maze = Array(36).fill(null).map(() => Array(28).fill(MazeTile.EMPTY));
+        ghost.x = 13.5 * TILE_SIZE; // Set to house center
         ghost.forceExitHouse();
         ghost.setDirection(Direction.UP);
         ghost.update(maze);
-        expect(ghost.x).toBe(14 * TILE_SIZE);
+        expect(ghost.x).toBe(13.5 * TILE_SIZE);
     });
 
     it('should stay in the ghost house by default', () => {
