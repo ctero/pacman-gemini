@@ -1,13 +1,13 @@
 # Track Implementation Plan: ghost_ai_interaction_20260207
 
-## Phase 1: Ghost Foundations
+## Phase 1: Ghost Foundations [checkpoint: 7e0546a]
 - [x] Task: Ghost Base Class and Rendering (7b7e45e)
     - [ ] Write Tests: Ghost initialization and basic movement
     - [ ] Implement: Base `Ghost` class with Pixi.js representation
 - [x] Task: Ghost House and Spawning (18adb11)
     - [ ] Write Tests: Spawning logic and exit timers
     - [ ] Implement: Logic for ghosts waiting in and leaving the house
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Ghost Foundations' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Ghost Foundations' (Protocol in workflow.md)
 
 ## Phase 2: Targeting and Movement
 - [ ] Task: Pursuit Algorithms (Chase Mode)
