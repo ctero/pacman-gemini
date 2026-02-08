@@ -67,4 +67,12 @@ describe('Ghost Base Class', () => {
         expect(ghost.x).toBe(startX);
         expect(ghost.isFrightened()).toBe(false);
     });
+
+    it('should have eye direction matching movement direction', () => {
+        ghost.setDirection(Direction.RIGHT);
+        expect(ghost.getEyeDirection()).toBe(Direction.RIGHT);
+        
+        ghost.setDirection(Direction.UP);
+        expect(ghost.getEyeDirection()).toBe(Direction.UP);
+    });
 });

@@ -13,6 +13,7 @@ export class Ghost {
     private houseTimer: number = 0;
     private inHouse: boolean = true;
     private frightened: boolean = false;
+    private animationFrame: number = 0;
     
     public container: Container;
     private graphics: Graphics;
@@ -29,6 +30,10 @@ export class Ghost {
         this.updateVisualPosition();
     }
 
+    public getEyeDirection(): Direction {
+        return this.direction === Direction.NONE ? Direction.LEFT : this.direction;
+    }
+
     private draw() {
         this.graphics.clear();
         
@@ -41,19 +46,45 @@ export class Ghost {
         this.graphics.circle(4, 4, 4);
         this.graphics.fill(bodyColor);
         
+        // Legs animation (2 frames)
+        const legFrame = Math.floor(this.animationFrame / 10) % 2;
+        if (legFrame === 0) {
+            this.graphics.moveTo(0, 8);
+            this.graphics.lineTo(2, 6);
+            this.graphics.lineTo(4, 8);
+            this.graphics.lineTo(6, 6);
+            this.graphics.lineTo(8, 8);
+        } else {
+            this.graphics.moveTo(0, 6);
+            this.graphics.lineTo(2, 8);
+            this.graphics.lineTo(4, 6);
+            this.graphics.lineTo(6, 8);
+            this.graphics.lineTo(8, 6);
+        }
+        this.graphics.fill(bodyColor);
+
         if (this.frightened) {
-            // Squiggly mouth or just different eyes for frightened
+            // Squiggly mouth for frightened
             this.graphics.rect(1, 6, 6, 1);
             this.graphics.fill(eyeColor);
         } else {
+            // Eyes direction
+            const eyeDir = this.getEyeDirection();
+            let eyeOffsetX = 0;
+            let eyeOffsetY = 0;
+            if (eyeDir === Direction.LEFT) eyeOffsetX = -1;
+            if (eyeDir === Direction.RIGHT) eyeOffsetX = 1;
+            if (eyeDir === Direction.UP) eyeOffsetY = -1;
+            if (eyeDir === Direction.DOWN) eyeOffsetY = 1;
+
             // Eyes (white)
-            this.graphics.circle(2, 3, 1.5);
-            this.graphics.circle(6, 3, 1.5);
+            this.graphics.circle(2 + eyeOffsetX, 3 + eyeOffsetY, 1.5);
+            this.graphics.circle(6 + eyeOffsetX, 3 + eyeOffsetY, 1.5);
             this.graphics.fill(eyeColor);
 
             // Pupils (blue)
-            this.graphics.circle(2, 3, 0.5);
-            this.graphics.circle(6, 3, 0.5);
+            this.graphics.circle(2 + eyeOffsetX * 2, 3 + eyeOffsetY * 2, 0.5);
+            this.graphics.circle(6 + eyeOffsetX * 2, 3 + eyeOffsetY * 2, 0.5);
             this.graphics.fill(pupilColor);
         }
     }
@@ -121,6 +152,11 @@ export class Ghost {
                     maze
                 );
             }
+        }
+
+        if (this.direction !== Direction.NONE) {
+            this.animationFrame++;
+            this.draw();
         }
 
         if (this.direction === Direction.LEFT) {
