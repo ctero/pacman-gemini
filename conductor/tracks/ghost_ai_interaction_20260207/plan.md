@@ -28,7 +28,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Global State and Modes' (Protocol in workflow.md)
 
 ## Phase 4: Interactions and Lifecycle
-- [ ] Task: Pac-Man/Ghost Collision
+- [x] Task: Pac-Man/Ghost Collision (3d82c0d)
     - [ ] Write Tests: Collision detection and life loss
     - [ ] Implement: Logic to check for overlaps and trigger death animation/reset
 - [ ] Task: Level Reset
