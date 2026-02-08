@@ -16,7 +16,7 @@
 - [x] Task: Cruise Elroy Logic (d70e11e)
     - [ ] Write Tests: Blinky's speed increase based on dots remaining
     - [ ] Implement: Update `Ghost` class for Cruise Elroy state
-- [ ] Task: Ghost House Exit dot counters
+- [x] Task: Ghost House Exit dot counters (9194a25)
     - [ ] Write Tests: Personal and Global dot counter logic for house exit
     - [ ] Implement: Replace timer-based exit with dot counters
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Ghost AI & Behavior' (Protocol in workflow.md)
