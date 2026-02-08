@@ -4,7 +4,7 @@
 - [x] Task: Define Fruit Types and Level Mapping (66e0cf5)
     - [ ] Write Tests: Correct fruit type and score value for all levels (1-13+)
     - [ ] Implement: `FruitType` enum and `LEVEL_FRUIT_DATA` mapping
-- [ ] Task: Implement Spawning Triggers
+- [x] Task: Implement Spawning Triggers (20f2fd7)
     - [ ] Write Tests: Fruit spawn event at 70 and 170 dots eaten
     - [ ] Implement: Logic in `GameState` or a new `FruitManager` to track dot count and trigger spawning
 - [ ] Task: Implement Expiration and Lifecycle
