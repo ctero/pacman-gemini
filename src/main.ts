@@ -13,6 +13,7 @@ import { ScoringEngine } from './scoring';
 import { ScoringUI } from './scoringUI';
 import { AudioManager } from './audioManager';
 import { FruitManager } from './fruitManager';
+import { FruitRenderer } from './fruitRenderer';
 
 async function init() {
     const app = new Application();
@@ -32,6 +33,7 @@ async function init() {
     const gameState = new GameState();
     const scoringEngine = new ScoringEngine();
     const fruitManager = new FruitManager();
+    const fruitRenderer = new FruitRenderer();
     const scoringUI = new ScoringUI();
     scoringUI.addTo(app.stage);
     scoringUI.update(0, scoringEngine.getHighScore(), gameState.lives);
@@ -41,6 +43,7 @@ async function init() {
     const mazeRenderer = new MazeRenderer();
     mazeRenderer.render(mazeState.getData());
     mazeRenderer.addTo(app.stage);
+    fruitRenderer.addTo(app.stage);
 
     const pacman = new PacMan(13.5 * TILE_SIZE, 26 * TILE_SIZE);
     app.stage.addChild(pacman.container);
@@ -136,6 +139,9 @@ async function init() {
 
         gameState.update(ticker.deltaTime);
         fruitManager.update(ticker.deltaTime);
+        const activeFruitForRender = fruitManager.getActiveFruit();
+        fruitRenderer.render(activeFruitForRender ? activeFruitForRender.data.type : null);
+        
         pacman.update(ticker.deltaTime, mazeState.getData());
 
         const activeFruit = fruitManager.getActiveFruit();
