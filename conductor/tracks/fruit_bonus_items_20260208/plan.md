@@ -1,6 +1,6 @@
 # Track Implementation Plan: Fruit & Bonus Items
 
-## Phase 1: Data and Core Spawning
+## Phase 1: Data and Core Spawning [checkpoint: 578907e]
 - [x] Task: Define Fruit Types and Level Mapping (66e0cf5)
     - [ ] Write Tests: Correct fruit type and score value for all levels (1-13+)
     - [ ] Implement: `FruitType` enum and `LEVEL_FRUIT_DATA` mapping
@@ -10,7 +10,7 @@
 - [x] Task: Implement Expiration and Lifecycle (4ed8cd3)
     - [ ] Write Tests: Fruit disappears after timer (9.5s) or on Pac-Man death
     - [ ] Implement: Timer-based despawning and reset logic during `loseLife`
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Data and Core Spawning' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Data and Core Spawning' (Protocol in workflow.md)
 
 ## Phase 2: Interaction and Scoring
 - [ ] Task: Fruit Collision Logic
