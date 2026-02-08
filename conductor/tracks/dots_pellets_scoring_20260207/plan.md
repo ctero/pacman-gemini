@@ -1,7 +1,7 @@
 # Track Implementation Plan: dots_pellets_scoring_20260207
 
 ## Phase 1: Consumption Mechanics
-- [ ] Task: Dynamic Maze State
+- [x] Task: Dynamic Maze State (0b7f7dc)
     - [ ] Write Tests: Maze state initialization and item removal
     - [ ] Implement: Logic to track which dots/pellets remain in the maze
 - [ ] Task: Eating Logic
