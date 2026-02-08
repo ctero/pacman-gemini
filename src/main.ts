@@ -9,6 +9,8 @@ import { GameState, GhostMode } from './gameState';
 import { getBlinkyTarget, getPinkyTarget, getInkyTarget, getClydeTarget } from './ghostTargeting';
 import { checkCollision } from './collision';
 import { MazeState } from './mazeState';
+import { ScoringEngine } from './scoring';
+import { ScoringUI } from './scoringUI';
 
 async function init() {
     const app = new Application();
@@ -25,6 +27,10 @@ async function init() {
     document.getElementById('app')?.appendChild(app.canvas);
 
     const gameState = new GameState();
+    const scoringEngine = new ScoringEngine();
+    const scoringUI = new ScoringUI();
+    scoringUI.addTo(app.stage);
+
     const mazeState = new MazeState(MAZE_DATA);
     const mazeRenderer = new MazeRenderer();
     mazeRenderer.render(mazeState.getData());
@@ -77,8 +83,13 @@ async function init() {
             if (eaten === MazeTile.POWER_PELLET) {
                 gameState.startFrightenedMode();
                 ghosts.forEach(g => g.setFrightened(true));
+                scoringEngine.addPowerPellet();
+                scoringEngine.resetGhostMultiplier();
+            } else if (eaten === MazeTile.DOT) {
+                scoringEngine.addDot();
             }
-            // TODO: Score update
+            scoringEngine.updateHighScore();
+            scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore());
         }
 
         // Handle FRIGHTENED mode ending
@@ -108,16 +119,18 @@ async function init() {
             if (checkCollision(pacman, ghost)) {
                 if (ghost.isFrightened()) {
                     console.log('Ghost eaten!');
-                    // Original starting house positions
+                    scoringEngine.addGhost();
+                    scoringEngine.updateHighScore();
+                    scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore());
+                    
                     const startPositions = [
-                        { x: 13.5 * TILE_SIZE, y: 14 * TILE_SIZE }, // Blinky
-                        { x: 13.5 * TILE_SIZE, y: 17 * TILE_SIZE }, // Pinky
-                        { x: 11.5 * TILE_SIZE, y: 17 * TILE_SIZE }, // Inky
-                        { x: 15.5 * TILE_SIZE, y: 17 * TILE_SIZE }  // Clyde
+                        { x: 13.5 * TILE_SIZE, y: 14 * TILE_SIZE },
+                        { x: 13.5 * TILE_SIZE, y: 17 * TILE_SIZE },
+                        { x: 11.5 * TILE_SIZE, y: 17 * TILE_SIZE },
+                        { x: 15.5 * TILE_SIZE, y: 17 * TILE_SIZE }
                     ];
                     const pos = startPositions[index];
                     ghost.reset(pos.x, pos.y);
-                    // TODO: Score update for eating ghost
                 } else {
                     console.log('Pac-Man caught!');
                     resetPositions();
