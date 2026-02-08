@@ -22,7 +22,7 @@
 - [x] Task: Scatter/Chase Timer (f9e80de)
     - [ ] Write Tests: Mode transition timing
     - [ ] Implement: Global level timer to switch ghosts between Scatter and Chase
-- [ ] Task: Frightened State
+- [x] Task: Frightened State (ebf6ce8)
     - [ ] Write Tests: State change on power pellet consumption
     - [ ] Implement: Visual change (blue ghost) and pseudo-random movement logic
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Global State and Modes' (Protocol in workflow.md)
