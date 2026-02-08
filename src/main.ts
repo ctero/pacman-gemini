@@ -25,8 +25,8 @@ async function init() {
     mazeRenderer.render(MAZE_DATA);
     mazeRenderer.addTo(app.stage);
 
-    // Initial Pac-Man position (approx based on original)
-    const pacman = new PacMan(13.5 * TILE_SIZE, 23 * TILE_SIZE);
+    // Initial Pac-Man position (centered in the path at row 26)
+    const pacman = new PacMan(13.5 * TILE_SIZE, 26 * TILE_SIZE);
     app.stage.addChild(pacman.container);
 
     // Keyboard handling

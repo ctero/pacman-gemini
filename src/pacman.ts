@@ -8,7 +8,7 @@ export class PacMan {
     public y: number;
     public direction: Direction = Direction.NONE;
     public nextDirection: Direction = Direction.NONE;
-    public speed: number = 1.46;
+    public speed: number = 2.0;
     
     public container: Container;
     private graphics: Graphics;
