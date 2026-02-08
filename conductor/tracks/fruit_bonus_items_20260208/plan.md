@@ -13,7 +13,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Data and Core Spawning' (Protocol in workflow.md)
 
 ## Phase 2: Interaction and Scoring
-- [ ] Task: Fruit Collision Logic
+- [x] Task: Fruit Collision Logic (3c2e77a)
     - [ ] Write Tests: Detection of Pac-Man overlapping the fruit spawn point
     - [ ] Implement: Collision detection between Pac-Man and the active fruit
 - [ ] Task: Scoring and Score Popup UI
