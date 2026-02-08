@@ -22,6 +22,6 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Interaction and Scoring' (Protocol in workflow.md)
 
 ## Phase 3: Rendering and Assets
-- [ ] Task: Fruit Sprite Rendering
+- [x] Task: Fruit Sprite Rendering (f1b941b)
     - [ ] Implement: Add fruit sprites to the rendering loop and position them at the spawn point
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Rendering and Assets' (Protocol in workflow.md)
