@@ -16,10 +16,10 @@
 - [x] Task: Audio Manager (0645e7e)
     - [ ] Write Tests: Sound loading and state tracking
     - [ ] Implement: global `AudioManager` with Howler.js
-- [ ] Task: Core Sound Effects
+- [x] Task: Core Sound Effects (d4781cf)
     - [ ] Implement: Play intro theme and looping siren
     - [ ] Implement: "Waka-waka" chomping sound synchronization
-- [ ] Task: Event-Driven Sounds
+- [x] Task: Event-Driven Sounds (d4781cf)
     - [ ] Implement: Ghost eaten and death sounds
     - [ ] Implement: Power pellet state audio changes
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Audio Integration' (Protocol in workflow.md)
