@@ -20,7 +20,7 @@
 - [x] Task: Pac-Man Movement Engine (47dbb9e)
     - [ ] Write Tests: Directional movement, velocity, and tile alignment
     - [ ] Implement: Smooth, tile-based movement logic for Pac-Man
-- [ ] Task: Collision and Environment
+- [x] Task: Collision and Environment (48c54b0)
     - [ ] Write Tests: Wall collision and intersection detection
     - [ ] Implement: Wall stopping logic
     - [ ] Write Tests: Pre-turning (direction buffering)
