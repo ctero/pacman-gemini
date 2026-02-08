@@ -5,6 +5,9 @@ import { PacMan } from './pacman';
 import { Ghost } from './ghost';
 import { Direction } from './types';
 import { TILE_SIZE } from './constants';
+import { GameState, GhostMode } from './gameState';
+import { getBlinkyTarget, getPinkyTarget, getInkyTarget, getClydeTarget } from './ghostTargeting';
+import { checkCollision } from './collision';
 
 async function init() {
     const app = new Application();
@@ -17,28 +20,44 @@ async function init() {
         resolution: window.devicePixelRatio || 1,
     });
 
-    // Set pixelated scaling for pixel art
     app.canvas.style.imageRendering = 'pixelated';
-    
     document.getElementById('app')?.appendChild(app.canvas);
 
+    const gameState = new GameState();
     const mazeRenderer = new MazeRenderer();
     mazeRenderer.render(MAZE_DATA);
     mazeRenderer.addTo(app.stage);
 
-    // Initial Pac-Man position (centered in the path at row 26)
     const pacman = new PacMan(13.5 * TILE_SIZE, 26 * TILE_SIZE);
     app.stage.addChild(pacman.container);
 
-    // Initial Ghost positions (in the house)
     const blinky = new Ghost(13.5 * TILE_SIZE, 14 * TILE_SIZE, 0xff0000);
     const pinky = new Ghost(13.5 * TILE_SIZE, 17 * TILE_SIZE, 0xffb8ff);
     const inky = new Ghost(11.5 * TILE_SIZE, 17 * TILE_SIZE, 0x00ffff);
     const clyde = new Ghost(15.5 * TILE_SIZE, 17 * TILE_SIZE, 0xffb852);
 
-    app.stage.addChild(blinky.container, pinky.container, inky.container, clyde.container);
+    const ghosts = [blinky, pinky, inky, clyde];
+    app.stage.addChild(...ghosts.map(g => g.container));
 
-    // Keyboard handling
+    const resetPositions = () => {
+        pacman.x = 13.5 * TILE_SIZE;
+        pacman.y = 26 * TILE_SIZE;
+        pacman.direction = Direction.NONE;
+        pacman.nextDirection = Direction.NONE;
+
+        blinky.x = 13.5 * TILE_SIZE; blinky.y = 14 * TILE_SIZE;
+        pinky.x = 13.5 * TILE_SIZE; pinky.y = 17 * TILE_SIZE;
+        inky.x = 11.5 * TILE_SIZE; inky.y = 17 * TILE_SIZE;
+        clyde.x = 15.5 * TILE_SIZE; clyde.y = 17 * TILE_SIZE;
+
+        ghosts.forEach(g => {
+            g.direction = Direction.NONE;
+            g.setHouseTimer(60); // 1 second wait
+        });
+    };
+
+    resetPositions();
+
     window.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowUp') pacman.setNextDirection(Direction.UP);
         if (e.key === 'ArrowDown') pacman.setNextDirection(Direction.DOWN);
@@ -47,7 +66,33 @@ async function init() {
     });
 
     app.ticker.add((ticker) => {
+        gameState.update(ticker.deltaTime);
         pacman.update(ticker.deltaTime, MAZE_DATA);
+
+        // Update Ghost AI Targets
+        if (gameState.ghostMode === GhostMode.CHASE) {
+            blinky.setTarget(getBlinkyTarget({ x: pacman.x, y: pacman.y }));
+            pinky.setTarget(getPinkyTarget({ x: pacman.x, y: pacman.y }, pacman.direction));
+            inky.setTarget(getInkyTarget({ x: pacman.x, y: pacman.y }, pacman.direction, { x: blinky.x, y: blinky.y }));
+            clyde.setTarget(getClydeTarget({ x: clyde.x, y: clyde.y }, { x: pacman.x, y: pacman.y }));
+        } else if (gameState.ghostMode === GhostMode.SCATTER) {
+            blinky.setTarget({ x: 25 * TILE_SIZE, y: -2 * TILE_SIZE }); // Top Right
+            pinky.setTarget({ x: 2 * TILE_SIZE, y: -2 * TILE_SIZE });  // Top Left
+            inky.setTarget({ x: 27 * TILE_SIZE, y: 34 * TILE_SIZE }); // Bottom Right
+            clyde.setTarget({ x: 0, y: 34 * TILE_SIZE });             // Bottom Left
+        }
+
+        ghosts.forEach(ghost => {
+            ghost.update(MAZE_DATA);
+            if (checkCollision(pacman, ghost)) {
+                if (ghost.isFrightened()) {
+                    // TODO: Ghost eaten logic
+                } else {
+                    console.log('Pac-Man caught!');
+                    resetPositions();
+                }
+            }
+        });
     });
 
     console.log('Pac-Man engine initialized');
