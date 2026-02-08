@@ -1,4 +1,6 @@
 import { Application } from 'pixi.js';
+import { MazeRenderer } from './mazeRenderer';
+import { MAZE_DATA } from './mazeData';
 
 async function init() {
     const app = new Application();
@@ -15,6 +17,10 @@ async function init() {
     app.canvas.style.imageRendering = 'pixelated';
     
     document.getElementById('app')?.appendChild(app.canvas);
+
+    const mazeRenderer = new MazeRenderer();
+    mazeRenderer.render(MAZE_DATA);
+    mazeRenderer.addTo(app.stage);
 
     console.log('Pac-Man engine initialized');
 }
