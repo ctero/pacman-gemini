@@ -62,6 +62,21 @@ export class MazeRenderer {
         }
     }
 
+    public flashWalls(maze: MazeTile[][], flash: boolean) {
+        this.wallContainer.removeChildren();
+        const color = flash ? 0xffffff : 0x2121ff;
+        for (let y = 0; y < maze.length; y++) {
+            for (let x = 0; x < maze[y].length; x++) {
+                if (maze[y][x] === MazeTile.WALL) {
+                    const wall = new Graphics();
+                    wall.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    wall.fill(color);
+                    this.wallContainer.addChild(wall);
+                }
+            }
+        }
+    }
+
     public addTo(parent: Container) {
         parent.addChild(this.wallContainer);
         parent.addChild(this.dotContainer);

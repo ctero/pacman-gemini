@@ -54,6 +54,14 @@ export class GameState {
         }
     }
 
+    public nextLevel() {
+        this.level++;
+        this.status = GameStatus.READY;
+        this.timer = 0;
+        this.phaseIndex = 0;
+        this.frightenedTimer = 0;
+    }
+
     public update(frames: number) {
         if (this.status !== GameStatus.PLAYING) return;
 

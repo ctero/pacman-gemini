@@ -114,7 +114,14 @@ async function init() {
     });
 
     app.ticker.add((ticker) => {
-        if (!gameStarted || gameState.status !== GameStatus.PLAYING) return;
+        if (!gameStarted || gameState.status === GameStatus.GAME_OVER) return;
+
+        if (gameState.status === GameStatus.LEVEL_COMPLETE) {
+            // Handle flashing animation before next level
+            return;
+        }
+
+        if (gameState.status !== GameStatus.PLAYING) return;
 
         gameState.update(ticker.deltaTime);
         pacman.update(ticker.deltaTime, mazeState.getData());
@@ -138,6 +145,27 @@ async function init() {
             }
             scoringEngine.updateHighScore();
             scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore(), gameState.lives);
+
+            // Check for level completion
+            if (mazeState.getRemainingItemsCount() === 0) {
+                gameState.status = GameStatus.LEVEL_COMPLETE;
+                audioManager.stop('siren');
+                audioManager.stop('power_siren');
+                
+                // Flash animation sequence
+                let flashCount = 0;
+                const flashInterval = setInterval(() => {
+                    mazeRenderer.flashWalls(mazeState.getData(), flashCount % 2 === 0);
+                    flashCount++;
+                    if (flashCount > 10) {
+                        clearInterval(flashInterval);
+                        gameState.nextLevel();
+                        mazeState = new MazeState(MAZE_DATA);
+                        mazeRenderer.render(mazeState.getData());
+                        resetPositions();
+                    }
+                }, 200);
+            }
         }
 
         // Handle FRIGHTENED mode ending
