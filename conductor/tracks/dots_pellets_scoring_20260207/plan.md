@@ -1,13 +1,13 @@
 # Track Implementation Plan: dots_pellets_scoring_20260207
 
-## Phase 1: Consumption Mechanics
+## Phase 1: Consumption Mechanics [checkpoint: 62bdf59]
 - [x] Task: Dynamic Maze State (0b7f7dc)
     - [ ] Write Tests: Maze state initialization and item removal
     - [ ] Implement: Logic to track which dots/pellets remain in the maze
 - [x] Task: Eating Logic (168e21f)
     - [ ] Write Tests: Pac-Man eating dots and pellets based on position
     - [ ] Implement: Collision check between Pac-Man and maze items
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Consumption Mechanics' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Consumption Mechanics' (Protocol in workflow.md)
 
 ## Phase 2: Power Pellets and Ghost Interaction
 - [ ] Task: Trigger Frightened Mode
