@@ -14,7 +14,7 @@ Implement the core logic for loading and saving the high score using `localStora
 ## Phase 2: Integration and Persistence
 Integrate the persistence logic into the main game loop to ensure the high score is saved at the appropriate time.
 
-- [ ] Task: Persist high score on Game Over
+- [x] Task: Persist high score on Game Over [57b3f95]
     - [ ] Update `src/main.ts` to call `scoringEngine.saveHighScore()` when the game state transitions to `GAME_OVER`
     - [ ] Ensure `ScoringEngine` is initialized with the persisted high score at game start
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Integration and Persistence' (Protocol in workflow.md)
