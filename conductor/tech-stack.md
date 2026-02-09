@@ -1,1 +1,14 @@
-# Tech Stack\n\n## Core Technologies\n- **Language:** TypeScript\n- **Rendering Engine:** Pixi.js\n- **Build Tool:** Vite\n\n## Libraries and Utilities\n- **Audio:** Howler.js\n\n## Development Environment\n- **Runtime:** Modern Web Browsers\n- **Package Manager:** npm (assumed default)
+# Tech Stack
+
+## Core Technologies
+- **Language:** TypeScript
+- **Rendering Engine:** Pixi.js
+- **Build Tool:** Vite
+
+## Libraries and Utilities
+- **Audio:** Howler.js
+- **Persistence:** browser `localStorage`
+
+## Development Environment
+- **Runtime:** Modern Web Browsers
+- **Package Manager:** npm (assumed default)
