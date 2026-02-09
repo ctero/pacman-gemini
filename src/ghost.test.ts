@@ -55,13 +55,17 @@ describe('Ghost Base Class', () => {
     });
 
     it('should reset position and state when reset() is called', () => {
-        const startX = ghost.x;
-        const startY = ghost.y;
+        const startX = 13.5 * TILE_SIZE;
+        const startY = 17 * TILE_SIZE; // Inside house
         ghost.x += 100;
         ghost.setFrightened(true);
         ghost.reset(startX, startY);
         expect(ghost.x).toBe(startX);
         expect(ghost.isFrightened()).toBe(false);
+        expect(ghost.isInHouse()).toBe(true);
+
+        ghost.reset(13.5 * TILE_SIZE, 14 * TILE_SIZE); // Outside house
+        expect(ghost.isInHouse()).toBe(false);
     });
 
     it('should have eye direction matching movement direction', () => {

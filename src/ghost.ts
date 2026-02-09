@@ -176,7 +176,6 @@ export class Ghost {
 
     public setHouseTimer(frames: number) {
         this.houseTimer = frames;
-        this.inHouse = frames > 0;
     }
 
     public getHouseTimer(): number {
@@ -198,8 +197,10 @@ export class Ghost {
     public reset(x: number, y: number) {
         this.x = x;
         this.y = y;
+        this.inHouse = (Math.round(y / TILE_SIZE) === 17);
         this.direction = Direction.NONE;
         this.frightened = false;
+        this.flashing = false;
         this.state = GhostState.NORMAL;
         this.exiting = false;
         this.exitStep = 0;

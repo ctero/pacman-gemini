@@ -101,19 +101,30 @@ describe('PacMan Collision and Environment', () => {
         maze[10][10] = MazeTile.EMPTY;
         maze[10][11] = MazeTile.EMPTY;
         maze[9][11] = MazeTile.EMPTY;
-        
-        pacman.x = 10 * TILE_SIZE + 4;
+
+        pacman.x = 10 * TILE_SIZE;
         pacman.y = 10 * TILE_SIZE;
         pacman.setDirection(Direction.RIGHT);
         pacman.setNextDirection(Direction.UP);
-        
-        // Move until he hits the wall or turns
-        for (let i = 0; i < 15; i++) {
-            pacman.update(1, maze);
-        }
-        
+
+        for (let i = 0; i < 20; i++) pacman.update(1, maze);
+
         expect(pacman.direction).toBe(Direction.UP);
-        expect(pacman.y).toBeLessThan(10 * TILE_SIZE);
+        expect(pacman.x).toBe(11 * TILE_SIZE);
+    });
+
+    it('should reset position and direction when reset() is called', () => {
+        pacman.x += 100;
+        pacman.y += 100;
+        pacman.setDirection(Direction.LEFT);
+        pacman.setNextDirection(Direction.UP);
+        
+        pacman.reset(14 * TILE_SIZE, 23 * TILE_SIZE);
+        
+        expect(pacman.x).toBe(14 * TILE_SIZE);
+        expect(pacman.y).toBe(23 * TILE_SIZE);
+        expect(pacman.direction).toBe(Direction.NONE);
+        expect(pacman.nextDirection).toBe(Direction.NONE);
     });
 
     it('REPRO: should not stop before a turn when buffering', () => {

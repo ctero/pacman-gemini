@@ -251,6 +251,14 @@ export class PacMan {
         this.y = Math.round(this.y / TILE_SIZE) * TILE_SIZE;
     }
 
+    public reset(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+        this.direction = Direction.NONE;
+        this.nextDirection = Direction.NONE;
+        this.updateVisualPosition();
+    }
+
     private updateVisualPosition() {
         this.container.x = this.x;
         this.container.y = this.y;

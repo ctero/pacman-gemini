@@ -93,20 +93,12 @@ async function init() {
     let gameStarted = false;
 
     const resetPositions = () => {
-        pacman.x = 13.5 * TILE_SIZE;
-        pacman.y = 26 * TILE_SIZE;
-        pacman.direction = Direction.NONE;
-        pacman.nextDirection = Direction.NONE;
+        pacman.reset(13.5 * TILE_SIZE, 26 * TILE_SIZE);
 
-        blinky.x = 13.5 * TILE_SIZE; blinky.y = 14 * TILE_SIZE;
-        pinky.x = 13.5 * TILE_SIZE; pinky.y = 17 * TILE_SIZE;
-        inky.x = 11.5 * TILE_SIZE; inky.y = 17 * TILE_SIZE;
-        clyde.x = 15.5 * TILE_SIZE; clyde.y = 17 * TILE_SIZE;
-
-        ghosts.forEach(g => {
-            g.direction = Direction.NONE;
-            g.setHouseTimer(60); // 1 second wait
-        });
+        blinky.reset(13.5 * TILE_SIZE, 14 * TILE_SIZE);
+        pinky.reset(13.5 * TILE_SIZE, 17 * TILE_SIZE);
+        inky.reset(11.5 * TILE_SIZE, 17 * TILE_SIZE);
+        clyde.reset(15.5 * TILE_SIZE, 17 * TILE_SIZE);
 
         fruitManager.reset();
 
