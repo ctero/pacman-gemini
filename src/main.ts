@@ -206,8 +206,10 @@ async function init() {
                 scoringEngine.addPowerPellet();
                 scoringEngine.resetGhostMultiplier();
                 
-                audioManager.stop('siren');
-                audioManager.play('power_siren', true);
+                if (!audioManager.isPlaying('power_siren')) { 
+                    audioManager.stop('siren');
+                    audioManager.play('power_siren', true);
+                }
             } else if (eaten === MazeTile.DOT) {
                 scoringEngine.addDot();
                 if (!audioManager.isPlaying('chomp')) {

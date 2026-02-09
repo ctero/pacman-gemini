@@ -8,12 +8,12 @@ export class AudioManager {
 
     constructor() {
         const soundFiles: Record<SoundName, string> = {
-            intro: '/sounds/intro.mp3',
-            siren: '/sounds/siren.mp3',
-            chomp: '/sounds/chomp.mp3',
-            power_siren: '/sounds/power_siren.mp3',
-            eat_ghost: '/sounds/eat_ghost.mp3',
-            death: '/sounds/death.mp3',
+            intro: 'sounds/intro.mp3',
+            siren: 'sounds/siren.wav',
+            chomp: 'sounds/chomp.wav',
+            power_siren: 'sounds/power_siren.mp3',
+            eat_ghost: 'sounds/eat_ghost.mp3',
+            death: 'sounds/death.mp3',
         };
 
         for (const [name, path] of Object.entries(soundFiles)) {
