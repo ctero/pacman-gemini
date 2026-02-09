@@ -256,26 +256,24 @@ export class Ghost {
     }
 
     private handleEntering() {
-        const centerTileX = 13.5 * TILE_SIZE;
         const speed = this.getSpeed();
 
         if (this.state === GhostState.ENTERING_HOUSE) {
-            // First move horizontally to 13.5 (center) if not already there
-            if (Math.abs(this.x - centerTileX) > 0.1) {
-                this.x += this.x < centerTileX ? speed : -speed;
-                if (Math.abs(this.x - centerTileX) < speed) this.x = centerTileX;
-                this.direction = this.x < centerTileX ? Direction.RIGHT : Direction.LEFT;
-            } else if (Math.abs(this.y - this.homePosition.y) > 0.1) {
-                // Then move down to home Y
+            // We are already at centerTileX (13.5) from the transition in update()
+            // Step 1: Move vertically to home Y
+            if (Math.abs(this.y - this.homePosition.y) > 0.1) {
                 this.y += this.y < this.homePosition.y ? speed : -speed;
                 if (Math.abs(this.y - this.homePosition.y) < speed) this.y = this.homePosition.y;
                 this.direction = this.y < this.homePosition.y ? Direction.DOWN : Direction.UP;
-            } else if (Math.abs(this.x - this.homePosition.x) > 0.1) {
-                // Finally move to home X
+            } 
+            // Step 2: Move horizontally to home X
+            else if (Math.abs(this.x - this.homePosition.x) > 0.1) {
                 this.x += this.x < this.homePosition.x ? speed : -speed;
                 if (Math.abs(this.x - this.homePosition.x) < speed) this.x = this.homePosition.x;
                 this.direction = this.x < this.homePosition.x ? Direction.RIGHT : Direction.LEFT;
-            } else {
+            } 
+            // Step 3: Reached home
+            else {
                 // Reached home
                 this.state = GhostState.REGENERATING;
                 this.inHouse = true;
