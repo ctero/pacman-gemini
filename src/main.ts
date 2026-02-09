@@ -109,6 +109,7 @@ async function init() {
         } else {
             scoringUI.showGameOver(true);
             gameState.status = GameStatus.GAME_OVER;
+            scoringEngine.saveHighScore();
         }
         scoringUI.update(scoringEngine.getScore(), scoringEngine.getHighScore(), gameState.lives);
     };
