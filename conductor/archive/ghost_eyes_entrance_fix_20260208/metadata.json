@@ -1,0 +1,8 @@
+{
+  "track_id": "ghost_eyes_entrance_fix_20260208",
+  "type": "bug",
+  "status": "new",
+  "created_at": "2026-02-08T18:50:00Z",
+  "updated_at": "2026-02-08T18:50:00Z",
+  "description": "Fix a bug where ghost eyes reach the ghost house entrance but fail to pass through the gate."
+}
