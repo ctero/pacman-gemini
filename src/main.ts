@@ -91,6 +91,7 @@ async function init() {
     scoringUI.addTo(app.stage);
 
     let gameStarted = false;
+    let introPlaying = false;
 
     const resetPositions = () => {
         pacman.reset(13.5 * TILE_SIZE, 26 * TILE_SIZE);
@@ -115,17 +116,22 @@ async function init() {
     };
 
     const startGame = () => {
+        if (introPlaying) return;
         if (gameStarted && gameState.status !== GameStatus.READY) return;
+        
+        introPlaying = true;
         gameStarted = true;
-        gameState.status = GameStatus.PLAYING;
-        scoringUI.showReady(false);
-        audioManager.play('intro');
-        // Resume siren after intro
-        setTimeout(() => {
+        scoringUI.showReady(true);
+
+        audioManager.play('intro', false, () => {
+            introPlaying = false;
+            gameState.status = GameStatus.PLAYING;
+            scoringUI.showReady(false);
+            // Resume siren after intro
             if (!audioManager.isPlaying('siren') && gameState.status === GameStatus.PLAYING) {
                 audioManager.play('siren', true);
             }
-        }, 4000);
+        });
     };
 
     // Initialize UI and state

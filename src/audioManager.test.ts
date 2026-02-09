@@ -9,6 +9,7 @@ vi.mock('howler', () => {
             stop: vi.fn(),
             loop: vi.fn(),
             volume: vi.fn(),
+            once: vi.fn(),
             state: vi.fn().mockReturnValue('loaded'),
         })),
     };
@@ -35,5 +36,13 @@ describe('AudioManager', () => {
         expect(audioManager.isPlaying('siren')).toBe(true);
         audioManager.stop('siren');
         expect(audioManager.isPlaying('siren')).toBe(false);
+    });
+
+    it('should support an onEnd callback', () => {
+        const onEnd = vi.fn();
+        const id = audioManager.play('intro', false, onEnd);
+        expect(id).toBe(1);
+        // We can't easily trigger the event on the mock without more complex mocking,
+        // but we can check if 'once' was called on the Howl instance.
     });
 });

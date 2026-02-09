@@ -24,11 +24,14 @@ export class AudioManager {
         }
     }
 
-    public play(name: SoundName, loop: boolean = false): number | undefined {
+    public play(name: SoundName, loop: boolean = false, onEnd?: () => void): number | undefined {
         const sound = this.sounds.get(name);
         if (!sound) return undefined;
 
         sound.loop(loop);
+        if (onEnd) {
+            sound.once('end', onEnd);
+        }
         const id = sound.play();
         
         if (loop) {
