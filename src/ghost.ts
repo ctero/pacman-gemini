@@ -51,6 +51,7 @@ export class Ghost {
     public setEaten() {
         this.state = GhostState.EATEN;
         this.frightened = false;
+        this.inHouse = false;
         this.draw();
     }
 
@@ -319,26 +320,31 @@ export class Ghost {
 
         const currentSpeed = this.getSpeed();
 
+        // If eaten, check for entrance independently of tile center
+        if (this.state === GhostState.EATEN) {
+            const entranceX = 13.5 * TILE_SIZE;
+            const entranceY = 14 * TILE_SIZE;
+            const distToEntrance = Math.sqrt(
+                Math.pow(this.x - entranceX, 2) + 
+                Math.pow(this.y - entranceY, 2)
+            );
+            if (distToEntrance < currentSpeed) {
+                this.x = entranceX;
+                this.y = entranceY;
+                this.state = GhostState.ENTERING_HOUSE;
+                this.direction = Direction.DOWN;
+                this.draw();
+                return;
+            }
+        }
+
         // Decision point: center of tile
         if (this.isAtTileCenter(currentSpeed)) {
             const oldDir = this.direction;
             
-            let effectiveTarget = this.target;
-            if (this.state === GhostState.EATEN) {
-                effectiveTarget = { x: 13.5 * TILE_SIZE, y: 14 * TILE_SIZE };
-                
-                // Check if reached entrance
-                const distToEntrance = Math.sqrt(
-                    Math.pow(this.x - effectiveTarget.x, 2) + 
-                    Math.pow(this.y - effectiveTarget.y, 2)
-                );
-                if (distToEntrance < currentSpeed) {
-                    this.x = effectiveTarget.x;
-                    this.y = effectiveTarget.y;
-                    this.state = GhostState.ENTERING_HOUSE;
-                    return;
-                }
-            }
+            let effectiveTarget = (this.state === GhostState.EATEN)
+                ? { x: 13.5 * TILE_SIZE, y: 14 * TILE_SIZE }
+                : this.target;
 
             if (this.frightened) {
                 this.direction = this.chooseRandomDirection(maze);
