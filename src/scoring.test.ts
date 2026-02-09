@@ -1,10 +1,22 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ScoringEngine } from './scoring';
 
 describe('ScoringEngine', () => {
     let engine: ScoringEngine;
 
     beforeEach(() => {
+        // Mock localStorage
+        const localStorageMock = (() => {
+            let store: { [key: string]: string } = {};
+            return {
+                getItem: (key: string) => store[key] || null,
+                setItem: (key: string, value: string) => { store[key] = value.toString(); },
+                clear: () => { store = {}; },
+                removeItem: (key: string) => { delete store[key]; }
+            };
+        })();
+        Object.defineProperty(window, 'localStorage', { value: localStorageMock, writable: true });
+
         engine = new ScoringEngine();
     });
 
@@ -52,5 +64,31 @@ describe('ScoringEngine', () => {
         expect(engine.getScore()).toBe(100);
         engine.addFruit(500);
         expect(engine.getScore()).toBe(600);
+    });
+
+    describe('Persistence', () => {
+        beforeEach(() => {
+            localStorage.clear();
+            // @ts-ignore - access private static for test reset
+            ScoringEngine.highScore = 0;
+        });
+
+        it('should load high score from localStorage', () => {
+            localStorage.setItem('pacman_highscore', '5000');
+            engine.loadHighScore();
+            expect(engine.getHighScore()).toBe(5000);
+        });
+
+        it('should save high score to localStorage', () => {
+            engine.addFruit(1000);
+            engine.updateHighScore();
+            engine.saveHighScore();
+            expect(localStorage.getItem('pacman_highscore')).toBe('1000');
+        });
+
+        it('should default to 0 if no high score in localStorage', () => {
+            engine.loadHighScore();
+            expect(engine.getHighScore()).toBe(0);
+        });
     });
 });

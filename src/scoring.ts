@@ -3,6 +3,30 @@ export class ScoringEngine {
     private static highScore: number = 0;
     private ghostMultiplier: number = 1;
     private dotsEaten: number = 0;
+    private static readonly STORAGE_KEY = 'pacman_highscore';
+
+    constructor() {
+        this.loadHighScore();
+    }
+
+    public loadHighScore() {
+        try {
+            const stored = localStorage.getItem(ScoringEngine.STORAGE_KEY);
+            if (stored) {
+                ScoringEngine.highScore = parseInt(stored, 10) || 0;
+            }
+        } catch (e) {
+            console.error('Failed to load high score', e);
+        }
+    }
+
+    public saveHighScore() {
+        try {
+            localStorage.setItem(ScoringEngine.STORAGE_KEY, ScoringEngine.highScore.toString());
+        } catch (e) {
+            console.error('Failed to save high score', e);
+        }
+    }
 
     public addDot() {
         this.score += 10;
