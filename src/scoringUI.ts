@@ -41,7 +41,7 @@ export class ScoringUI {
         // 1UP Label
         const oneUpLabel = new Text({ text: '1UP', style: labelStyle });
         oneUpLabel.position.set(24, 0);
-        
+
         this.scoreText = new Text({ text: '00', style });
         this.scoreText.position.set(48, 8);
         this.scoreText.anchor.set(1, 0); // Right aligned
@@ -55,12 +55,12 @@ export class ScoringUI {
         this.highScoreText.anchor.set(1, 0);
 
         this.readyText = new Text({ text: 'READY!', style: readyStyle });
-        this.readyText.position.set(112, 160);
+        this.readyText.position.set(112, 165);
         this.readyText.anchor.set(0.5, 0.5);
         this.readyText.visible = false;
 
         this.gameOverText = new Text({ text: 'GAME  OVER', style: gameOverStyle });
-        this.gameOverText.position.set(112, 160);
+        this.gameOverText.position.set(112, 165);
         this.gameOverText.anchor.set(0.5, 0.5);
         this.gameOverText.visible = false;
 

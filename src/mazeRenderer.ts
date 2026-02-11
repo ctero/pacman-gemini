@@ -21,12 +21,11 @@ export class MazeRenderer {
             // The actual wall area (the maze) starts at row 3 and ends before the last 2 rows.
             // Maze height: (36 - 3 - 2) * TILE_SIZE = 31 * 8 = 248 pixels.
             // Maze width: 28 * TILE_SIZE = 224 pixels.
-            this.mazeSprite.width = 28 * TILE_SIZE;
-            this.mazeSprite.height = 31 * TILE_SIZE;
+            this.mazeSprite.width = 224;
+            this.mazeSprite.height = 252;
 
             // Offset the sprite by 3 tiles (24 pixels) vertically to align with the game grid
-            //this.mazeSprite.y = 3 * TILE_SIZE;
-            this.mazeSprite.y = 20;
+            this.mazeSprite.y = 18;
 
             this.wallContainer.addChild(this.mazeSprite);
         } catch (error) {
@@ -60,7 +59,7 @@ export class MazeRenderer {
                     }
                 } else if (tile === MazeTile.GHOST_HOUSE_DOOR) {
                     const door = new Graphics();
-                    door.rect(posX, posY + 3, TILE_SIZE, 2);
+                    door.rect(posX, posY + 5, TILE_SIZE, 2);
                     door.fill(0xffb8ae);
                     this.wallContainer.addChild(door);
                 }
