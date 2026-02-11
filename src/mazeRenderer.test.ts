@@ -16,6 +16,15 @@ vi.mock('pixi.js', () => {
             circle: vi.fn().mockReturnThis(),
             clear: vi.fn().mockReturnThis(),
         })),
+        Sprite: vi.fn().mockImplementation(() => ({
+            addChild: vi.fn(),
+            removeChildren: vi.fn(),
+            tint: 0xffffff,
+            visible: true
+        })),
+        Assets: {
+            load: vi.fn().mockResolvedValue({})
+        }
     };
 });
 
@@ -32,7 +41,7 @@ describe('MazeRenderer', () => {
         ];
         const renderer = new MazeRenderer();
         renderer.render(testMaze);
-        
+
         // Check if addChild was called
         expect(renderer.wallContainer.addChild).toHaveBeenCalled();
         expect(renderer.dotContainer.addChild).toHaveBeenCalled();

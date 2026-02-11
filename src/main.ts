@@ -43,6 +43,7 @@ async function init() {
 
     let mazeState = new MazeState(MAZE_DATA);
     const mazeRenderer = new MazeRenderer();
+    await mazeRenderer.initialize();
     mazeRenderer.render(mazeState.getData());
     mazeRenderer.addTo(app.stage);
     fruitRenderer.addTo(app.stage);
@@ -50,7 +51,7 @@ async function init() {
     const pacman = new PacMan(13.5 * TILE_SIZE, 26 * TILE_SIZE);
     const updatePacmanSpeeds = () => {
         const data = gameState.getLevelData();
-        const arcadeBasePixelSpeed = (80 / 60); 
+        const arcadeBasePixelSpeed = (80 / 60);
         pacman.setBaseSpeed(data.pacmanSpeed * arcadeBasePixelSpeed);
         pacman.setEatingSpeed(data.pacmanEatingSpeed * arcadeBasePixelSpeed);
     };
@@ -118,7 +119,7 @@ async function init() {
     const startGame = () => {
         if (introPlaying) return;
         if (gameStarted && gameState.status !== GameStatus.READY) return;
-        
+
         introPlaying = true;
         gameStarted = true;
         scoringUI.showReady(true);
@@ -147,7 +148,7 @@ async function init() {
             scoringEngine.resetGhostMultiplier();
             // score reset? usually yes for new game
             // we'd need a full reset function
-            window.location.reload(); 
+            window.location.reload();
         }
     });
 
@@ -191,7 +192,7 @@ async function init() {
 
         const activeFruitForRender = fruitManager.getActiveFruit();
         fruitRenderer.render(activeFruitForRender ? activeFruitForRender.data.type : null);
-        
+
         pacman.update(ticker.deltaTime, mazeState.getData());
 
         const activeFruit = fruitManager.getActiveFruit();
@@ -211,8 +212,8 @@ async function init() {
                 ghosts.forEach(g => g.setFrightened(true));
                 scoringEngine.addPowerPellet();
                 scoringEngine.resetGhostMultiplier();
-                
-                if (!audioManager.isPlaying('power_siren')) { 
+
+                if (!audioManager.isPlaying('power_siren')) {
                     audioManager.stop('siren');
                     audioManager.play('power_siren', true);
                 }
@@ -232,7 +233,7 @@ async function init() {
                 gameState.status = GameStatus.LEVEL_COMPLETE;
                 audioManager.stop('siren');
                 audioManager.stop('power_siren');
-                
+
                 // Flash animation sequence
                 let flashCount = 0;
                 const flashInterval = setInterval(() => {
@@ -293,7 +294,7 @@ async function init() {
                 if (ghost.isFrightened()) {
                     console.log('Ghost eaten!');
                     audioManager.play('eat_ghost');
-                    
+
                     const score = 200 * scoringEngine.getGhostMultiplier();
                     scoringEngine.addGhost();
                     scoringEngine.updateHighScore();
