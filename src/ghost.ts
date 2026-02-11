@@ -36,6 +36,7 @@ export class Ghost {
         this.homePosition = { x, y };
         // 17 * TILE_SIZE is inside the house
         this.inHouse = (Math.round(y / TILE_SIZE) === 17);
+        this.direction = this.inHouse ? Direction.NONE : Direction.LEFT;
         this.state = this.inHouse ? GhostState.NORMAL : GhostState.NORMAL; // Still NORMAL, but inHouse flag is used for logic
         this.container = new Container();
         this.graphics = new Graphics();
@@ -198,7 +199,7 @@ export class Ghost {
         this.x = x;
         this.y = y;
         this.inHouse = (Math.round(y / TILE_SIZE) === 17);
-        this.direction = Direction.NONE;
+        this.direction = this.inHouse ? Direction.NONE : Direction.LEFT;
         this.frightened = false;
         this.flashing = false;
         this.state = GhostState.NORMAL;
